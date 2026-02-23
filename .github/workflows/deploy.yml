@@ -17,24 +17,20 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             set -e
-
             PROJECT_DIR="/home/ubuntu/tech-serv"
-
-            mkdir -p /home/ubuntu
-
-            if [ ! -d "$PROJECT_DIR/.git" ]; then
-              echo "Carpeta no encontrada o no es un repo Git. Clonando..."
-              sudo rm -rf $PROJECT_DIR 
-              git clone https://github.com/CoilBetrox/tech-serv.git $PROJECT_DIR
-            fi
-
             cd $PROJECT_DIR
-
-            echo "Actualizando código desde GitHub..."
+            
             git fetch --all
             git reset --hard origin/main
             
-            # 5. Desplegar
-            echo "Levantando contenedores..."
-            sudo docker compose -f $PROJECT_DIR/docker-compose.yml down
-            sudo docker compose -f $PROJECT_DIR/docker-compose.yml up -d --build
+            # Construir y levantar uno por uno para ahorrar RAM
+            echo "Construyendo Backend..."
+            sudo docker compose build backend-service
+            sudo docker compose up -d backend-service
+
+            echo "Construyendo Frontend..."
+            sudo docker compose build frontend-service
+            sudo docker compose up -d frontend-service
+            
+            # Limpiar imágenes huérfanas para liberar espacio
+            sudo docker image prune -f
