@@ -16,13 +16,25 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            source $HOME/.bashrc
+            set -e
+
             PROJECT_DIR="/home/ubuntu/tech-serv"
-            if [ ! -d "$PROJECT_DIR" ]; then
+
+            mkdir -p /home/ubuntu
+
+            if [ ! -d "$PROJECT_DIR/.git" ]; then
+              echo "Carpeta no encontrada o no es un repo Git. Clonando..."
+              sudo rm -rf $PROJECT_DIR 
               git clone https://github.com/CoilBetrox/tech-serv.git $PROJECT_DIR
             fi
+
             cd $PROJECT_DIR
+
+            echo "Actualizando código desde GitHub..."
             git fetch --all
             git reset --hard origin/main
-            sudo docker compose down
-            sudo docker compose up -d --build
+            
+            # 5. Desplegar
+            echo "Levantando contenedores..."
+            sudo docker compose -f $PROJECT_DIR/docker-compose.yml down
+            sudo docker compose -f $PROJECT_DIR/docker-compose.yml up -d --build
