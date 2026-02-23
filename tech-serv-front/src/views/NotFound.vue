@@ -1,0 +1,95 @@
+<template>
+  <div class="min-h-screen bg-background-light dark:bg-background-dark flex items-center justify-center p-4">
+    <div class="fixed inset-0 z-0 overflow-hidden opacity-30">
+      <div class="absolute inset-0 bg-primary/5 blur-[100px]"></div>
+    </div>
+    
+    <div class="relative z-10 w-full max-w-[600px] text-center">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-12 border border-slate-200 dark:border-slate-800">
+        <!-- Icono grande -->
+        <div class="flex justify-center mb-8">
+          <div class="relative">
+            <div class="absolute inset-0 bg-primary/20 rounded-full blur-xl"></div>
+            <div class="relative bg-primary/10 text-primary w-32 h-32 rounded-full flex items-center justify-center">
+              <span class="material-symbols-outlined text-7xl">error</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Código 404 -->
+        <h1 class="text-8xl font-black text-primary mb-4">404</h1>
+        
+        <!-- Mensaje -->
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-3">
+          Page Not Found
+        </h2>
+        
+        <p class="text-slate-500 dark:text-slate-400 text-lg mb-8 max-w-md mx-auto">
+          The page you're looking for doesn't exist or has been moved. Let's get you back on track.
+        </p>
+        
+        <!-- Opciones de navegación -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <router-link 
+            to="/"
+            class="inline-flex items-center justify-center gap-2 px-6 h-12 bg-primary text-white rounded-lg font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
+          >
+            <span class="material-symbols-outlined">home</span>
+            Go to Home
+          </router-link>
+          
+          <router-link 
+            to="/admin/orders"
+            class="inline-flex items-center justify-center gap-2 px-6 h-12 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+          >
+            <span class="material-symbols-outlined">assignment</span>
+            Admin Dashboard
+          </router-link>
+        </div>
+        
+        <!-- Acciones rápidas -->
+        <div class="mt-12 pt-8 border-t border-slate-100 dark:border-slate-800">
+          <p class="text-sm text-slate-400 mb-4">Quick Actions</p>
+          <div class="flex flex-wrap gap-3 justify-center">
+            <router-link 
+              to="/"
+              class="text-xs text-slate-500 hover:text-primary transition-colors flex items-center gap-1"
+            >
+              <span class="material-symbols-outlined text-sm">search</span>
+              Check Ticket Status
+            </router-link>
+            <span class="text-slate-300">•</span>
+            <router-link 
+              to="/admin/login"
+              class="text-xs text-slate-500 hover:text-primary transition-colors flex items-center gap-1"
+            >
+              <span class="material-symbols-outlined text-sm">login</span>
+              Staff Login
+            </router-link>
+            <span class="text-slate-300">•</span>
+            <a 
+              href="#"
+              class="text-xs text-slate-500 hover:text-primary transition-colors flex items-center gap-1"
+            >
+              <span class="material-symbols-outlined text-sm">support</span>
+              Support Center
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Footer -->
+      <p class="text-slate-400 text-xs mt-8">
+        © 2024 TechFix Manager. All rights reserved.
+      </p>
+    </div>
+  </div>
+</template>
+
+<script setup>
+// No necesita lógica por ahora
+</script>
+
+<style scoped>
+/* Estilos específicos si son necesarios */
+</style>
