@@ -1,5 +1,7 @@
 // Configuración base de la API
-const API_BASE_URL = 'http://localhost:8080/api/v1'
+const API_BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:8080/api/v1' 
+  : '/api/v1';
 
 // Helper para manejar respuestas
 async function handleResponse(response) {
