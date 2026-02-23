@@ -6,7 +6,7 @@ import TicketStatus from '../views/public/TicketStatus.vue'
 import NotFound from '../views/NotFound.vue'
 
 // Vistas de admin
-import AdminLogin from '../views/admin/Login.vue'
+import Login from '../views/admin/Login.vue'
 import OrderList from '../views/admin/OrderList.vue'
 import CreateOrder from '../views/admin/CreateOrder.vue'
 import EditOrder from '../views/admin/EditOrder.vue'
@@ -23,7 +23,7 @@ const routes = [
   {
     path: '/admin/login',
     name: 'admin-login',
-    component: AdminLogin,
+    component: Login,
     meta: { public: true }
   },
   {
