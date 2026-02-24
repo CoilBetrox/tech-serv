@@ -52,6 +52,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login").permitAll()
@@ -92,20 +93,24 @@ public class SecurityConfig {
     }
 
     @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        
-        // Split the comma-separated string into a list
+    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    CorsConfiguration config = new CorsConfiguration();
+    
+    config.setAllowCredentials(true);
+    
+    // Convertir el string de origins en lista
+    if (allowedOrigins != null && !allowedOrigins.isEmpty()) {
         String[] origins = allowedOrigins.split(",");
         config.setAllowedOrigins(Arrays.asList(origins));
-        
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
     }
+    
+    config.addAllowedHeader("*");
+    config.addAllowedMethod("*");
+    
+    source.registerCorsConfiguration("/**", config);
+    return source;
+}
 
 }
 

@@ -1,31 +1,45 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { orderService } from '../services/api'
 
 export const useOrderStore = defineStore('orders', () => {
-  const orders = ref([
-    {
-      id: 'TK-1024',
-      clientName: 'Alex Johnson',
-      device: 'iPhone 13 Pro',
-      date: 'Oct 24, 2023',
-      status: 'in_process',
-      email: 'alex@example.com',
-      phone: '+1 (555) 123-4567',
-      serialNumber: 'SN123456',
-      problemDescription: 'Screen not responding to touch',
-      priority: 'high',
-      history: [
-        { status: 'received', date: 'Oct 20, 09:15 AM' },
-        { status: 'in_progress', date: 'Oct 21, 02:30 PM' }
-      ]
-    },
-    // ... más órdenes
-  ])
-  
+  const orders = ref([])
+  const isLoading = ref(false)
+
   const filters = ref({
     search: '',
     status: 'all'
   })
+
+  function mapApiOrderToUi(apiOrder) {
+    return {
+      id: apiOrder.ticketCode,
+      dbId: apiOrder.id,
+      clientName: `${apiOrder.device.customer.firstName} ${apiOrder.device.customer.lastName}`,
+      device: `${apiOrder.device.brand} ${apiOrder.device.model}`,
+      date: new Date(apiOrder.createdAt).toLocaleDateString('en-US', { 
+        month: 'short', day: 'numeric', year: 'numeric' 
+      }),
+      status: apiOrder.status.toLowerCase(),
+      phone: apiOrder.device.customer.phone,
+      description: apiOrder.description,
+      estimatedCost: apiOrder.estimatedCost
+    }
+  }
+
+  async function fetchOrders() {
+    isLoading.value = true
+    try {
+      const token = localStorage.getItem('token') 
+      const data = await orderService.getAllOrders(token)
+      
+      orders.value = data.map(mapApiOrderToUi)
+    } catch (error) {
+      console.error('Error fetching orders:', error)
+    } finally {
+      isLoading.value = false
+    }
+  }
   
   const filteredOrders = computed(() => {
     return orders.value.filter(order => {
@@ -34,7 +48,7 @@ export const useOrderStore = defineStore('orders', () => {
         order.clientName.toLowerCase().includes(filters.value.search.toLowerCase())
       
       const matchesStatus = filters.value.status === 'all' || 
-        order.status === filters.value.status
+        order.status === filters.value.status.toLowerCase()
       
       return matchesSearch && matchesStatus
     })
@@ -67,7 +81,9 @@ export const useOrderStore = defineStore('orders', () => {
     filters, 
     filteredOrders, 
     createOrder, 
-    updateOrder, 
-    getOrderById 
+    updateOrder,
+    isLoading,
+    fetchOrders,
+    getOrderById: (id) => orders.value.find(o => o.id === id) 
   }
 })
