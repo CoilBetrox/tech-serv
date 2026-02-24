@@ -51,7 +51,7 @@ export const authService = {
 // Servicio para órdenes (con token)
 export const orderService = {
   async getAllOrders(token) {
-    const response = await fetch(`${API_BASE_URL}/services`, {
+    const response = await fetch(`${API_BASE_URL}/services/created-by-me`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

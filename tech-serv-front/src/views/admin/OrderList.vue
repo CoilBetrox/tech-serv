@@ -144,6 +144,7 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
 import { useOrderStore } from '../../stores/order.store'
 import { useUIStore } from '../../stores/ui.store'
 import Header from '../../components/layout/Header.vue'
@@ -153,11 +154,15 @@ import StatusBadge from '../../components/ui/StatusBadge.vue'
 const orderStore = useOrderStore()
 const uiStore = useUIStore()
 
+onMounted(async () => {
+  await orderStore.fetchOrders()
+})
+
 const filterOptions = [
   { value: 'all', label: 'All' },
-  { value: 'pending', label: 'Pending' },
-  { value: 'in_process', label: 'In Process' },
-  { value: 'finished', label: 'Finished' }
+  { value: 'recibido', label: 'Received' },
+  { value: 'en_proceso', label: 'In Process' },
+  { value: 'finalizado', label: 'Finished' }
 ]
 
 function filterButtonClasses(status) {
