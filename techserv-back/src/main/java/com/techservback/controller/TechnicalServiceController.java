@@ -71,8 +71,10 @@ public class TechnicalServiceController {
                 }
 
                 if (customer.getId() == null) {
-                    // create new customer
+                    // create new customer and associate to admin user
+                    customer.setUser(admin);  // NUEVO: Asociar el admin logueado al customer
                     customer = customerService.createCustomer(customer);
+                    log.info("New customer '{}' created and associated to admin '{}'", customer.getEmail(), admin.getEmail());
                 } else {
                     // ensure exists
                     var existing = customerService.getCustomerById(customer.getId());

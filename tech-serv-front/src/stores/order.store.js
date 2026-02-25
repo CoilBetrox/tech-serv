@@ -23,6 +23,10 @@ export const useOrderStore = defineStore('orders', () => {
     return map[normalized] || 'recibido'
   }
 
+  function normalizeBackendStatus(status) {
+    return (status || '').toUpperCase().trim()
+  }
+
   function mapApiOrderToUi(apiOrder) {
     return {
       id: apiOrder.ticketCode,
@@ -33,9 +37,15 @@ export const useOrderStore = defineStore('orders', () => {
         month: 'short', day: 'numeric', year: 'numeric' 
       }),
       status: mapBackendStatusToUi(apiOrder.status),
+      backendStatus: normalizeBackendStatus(apiOrder.status),
       phone: apiOrder.device.customer.phone,
       description: apiOrder.description,
-      estimatedCost: apiOrder.estimatedCost
+      estimatedCost: apiOrder.estimatedCost,
+      receivedAt: apiOrder.receivedAt,
+      inProgressAt: apiOrder.inProgressAt,
+      finalizedAt: apiOrder.finalizedAt,
+      deliveredAt: apiOrder.deliveredAt,
+      createdAt: apiOrder.createdAt
     }
   }
 
@@ -73,6 +83,22 @@ export const useOrderStore = defineStore('orders', () => {
     orders.value.unshift(mapped)
     return mapped.id
   }
+
+  async function updateOrderStatus(ticketId, backendStatus) {
+    const order = orders.value.find(o => o.id === ticketId)
+    if (!order) throw new Error('Orden no encontrada en memoria')
+
+    const token = localStorage.getItem('token')
+    const updated = await orderService.updateOrderStatus(token, order.dbId, backendStatus)
+    const mapped = mapApiOrderToUi(updated)
+
+    const index = orders.value.findIndex(o => o.id === ticketId)
+    if (index !== -1) {
+      orders.value[index] = mapped
+    }
+
+    return mapped
+  }
   
   function updateOrder(id, updates) {
     const index = orders.value.findIndex(o => o.id === id)
@@ -90,6 +116,7 @@ export const useOrderStore = defineStore('orders', () => {
     filters, 
     filteredOrders, 
     createOrder, 
+    updateOrderStatus,
     updateOrder,
     isLoading,
     fetchOrders,
