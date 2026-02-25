@@ -85,14 +85,19 @@ export const orderService = {
     return handleResponse(response)
   },
   
-  async updateOrderStatus(token, id, status) {
+  async updateOrderStatus(token, id, status, message = null) {
+    const payload = { status }
+    if (message) {
+      payload.message = message
+    }
+    
     const response = await fetch(`${API_BASE_URL}/services/${id}/status`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify({ status })
+      body: JSON.stringify(payload)
     })
     return handleResponse(response)
   },

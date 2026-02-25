@@ -26,7 +26,7 @@ public class TechnicalService {
     private Long id;
 
     private String ticketCode; // AUTO
-    private String description;
+    private String description; // Mensaje inicial / estado "Recibido"
     private String status; // RECIBIDO, EN_DIAGNOSTICO, EN_REPARACION, LISTO_PARA_ENTREGA, ENTREGADO
     private LocalDate entryDate;
     private Double estimatedCost;
@@ -42,6 +42,16 @@ public class TechnicalService {
 
     @Column(name = "delivered_at")
     private LocalDateTime deliveredAt;
+
+    // Mensajes por estado
+    @Column(name = "in_progress_message", columnDefinition = "TEXT")
+    private String inProgressMessage;
+
+    @Column(name = "finalized_message", columnDefinition = "TEXT")
+    private String finalizedMessage;
+
+    @Column(name = "delivered_message", columnDefinition = "TEXT")
+    private String deliveredMessage;
 
     @ManyToOne
     @JoinColumn(name = "device_id")

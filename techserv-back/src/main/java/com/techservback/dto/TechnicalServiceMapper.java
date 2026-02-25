@@ -20,6 +20,9 @@ public class TechnicalServiceMapper {
         dto.setInProgressAt(s.getInProgressAt());
         dto.setFinalizedAt(s.getFinalizedAt());
         dto.setDeliveredAt(s.getDeliveredAt());
+        dto.setInProgressMessage(s.getInProgressMessage());
+        dto.setFinalizedMessage(s.getFinalizedMessage());
+        dto.setDeliveredMessage(s.getDeliveredMessage());
         if (s.getAdmin() != null) {
             dto.setAdminId(s.getAdmin().getId());
         }

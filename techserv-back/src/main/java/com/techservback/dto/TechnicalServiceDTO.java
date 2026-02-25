@@ -17,6 +17,9 @@ public class TechnicalServiceDTO {
     private LocalDateTime inProgressAt;
     private LocalDateTime finalizedAt;
     private LocalDateTime deliveredAt;
+    private String inProgressMessage;
+    private String finalizedMessage;
+    private String deliveredMessage;
     private DeviceDTO device;
     private Long adminId;
 }
