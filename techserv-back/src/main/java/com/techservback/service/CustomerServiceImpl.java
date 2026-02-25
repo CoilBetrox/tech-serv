@@ -1,5 +1,6 @@
 package com.techservback.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,5 +35,12 @@ public class CustomerServiceImpl implements ICustomerService {
     @Transactional(readOnly = true)
     public Optional<Customer> findByEmail(String email) {
         return customerRepository.findFirstByEmail(email);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Customer> getCustomersByUserId(Long userId) {
+        log.info("Fetching customers for user ID: {}", userId);
+        return customerRepository.findByUserId(userId);
     }
 }

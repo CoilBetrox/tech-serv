@@ -33,4 +33,9 @@ public class User {
     @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<TechnicalService> createdServices;
+
+    // NUEVO: Clientes asociados a este usuario
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Customer> customers;
 }
