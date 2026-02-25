@@ -81,6 +81,9 @@ Body:
 7) Search Services (Public)
 GET /api/v1/services/search?query=TKT-A7F3E2B1
 
+7.1) Get Ticket Status by TicketCode (Public)
+GET /api/v1/services/ticket/{ticketCode}
+
 8) Get Customer Services (Public)
 GET /api/v1/services/my-services?customerId=1
 

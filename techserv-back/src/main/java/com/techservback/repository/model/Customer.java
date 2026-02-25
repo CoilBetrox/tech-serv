@@ -3,7 +3,6 @@ package com.techservback.repository.model;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +25,7 @@ public class Customer {
 
     private String firstName;
     private String lastName;
+    private String email;
     private String phone;
 
     @OneToOne(cascade = CascadeType.ALL)

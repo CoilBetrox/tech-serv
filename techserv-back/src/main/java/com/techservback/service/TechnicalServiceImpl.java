@@ -1,6 +1,7 @@
 package com.techservback.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,12 +39,16 @@ public class TechnicalServiceImpl implements ITechnicalServiceService {
         // Set initial status if not provided
         if (service.getStatus() == null || service.getStatus().isEmpty()) {
             service.setStatus("RECIBIDO");
+        } else {
+            service.setStatus(normalizeStatus(service.getStatus()));
         }
         
         // Set entry date if not provided
         if (service.getEntryDate() == null) {
             service.setEntryDate(LocalDate.now());
         }
+
+        applyStatusDates(service, service.getStatus());
         
         log.info("Creating technical service - Ticket: {} - Admin: {} - Device: {}", 
             service.getTicketCode(), 
@@ -80,12 +85,25 @@ public class TechnicalServiceImpl implements ITechnicalServiceService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Optional<TechnicalService> getByTicketCode(String ticketCode) {
+        log.info("Getting service by ticketCode: {}", ticketCode);
+        return technicalServiceRepository.findByTicketCode(ticketCode);
+    }
+
+    @Override
     @Transactional
     public TechnicalService updateServiceStatus(Long id, String status) {
         TechnicalService service = technicalServiceRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Service not found"));
-        log.info("Updating service {} status to: {}", id, status);
-        service.setStatus(status);
+        String normalizedStatus = normalizeStatus(status);
+        if (normalizedStatus.isEmpty()) {
+            throw new IllegalArgumentException("Status must not be empty");
+        }
+
+        log.info("Updating service {} status to: {}", id, normalizedStatus);
+        service.setStatus(normalizedStatus);
+        applyStatusDates(service, normalizedStatus);
         return technicalServiceRepository.save(service);
     }
 
@@ -101,6 +119,38 @@ public class TechnicalServiceImpl implements ITechnicalServiceService {
     public List<TechnicalService> getServicesByAdmin(Long adminId) {
         log.info("Getting services created by admin: {}", adminId);
         return technicalServiceRepository.findByAdminIdOrderByCreatedAtDesc(adminId);
+    }
+
+    private String normalizeStatus(String status) {
+        return status == null ? "" : status.trim().toUpperCase();
+    }
+
+    private void applyStatusDates(TechnicalService service, String status) {
+        LocalDateTime now = LocalDateTime.now();
+
+        switch (normalizeStatus(status)) {
+            case "RECIBIDO" -> {
+                if (service.getReceivedAt() == null) service.setReceivedAt(now);
+            }
+            case "EN_DIAGNOSTICO", "EN_REPARACION" -> {
+                if (service.getReceivedAt() == null) service.setReceivedAt(now);
+                if (service.getInProgressAt() == null) service.setInProgressAt(now);
+            }
+            case "LISTO_PARA_ENTREGA" -> {
+                if (service.getReceivedAt() == null) service.setReceivedAt(now);
+                if (service.getInProgressAt() == null) service.setInProgressAt(now);
+                if (service.getFinalizedAt() == null) service.setFinalizedAt(now);
+            }
+            case "ENTREGADO" -> {
+                if (service.getReceivedAt() == null) service.setReceivedAt(now);
+                if (service.getInProgressAt() == null) service.setInProgressAt(now);
+                if (service.getFinalizedAt() == null) service.setFinalizedAt(now);
+                if (service.getDeliveredAt() == null) service.setDeliveredAt(now);
+            }
+            default -> {
+                // no-op for unknown statuses
+            }
+        }
     }
 
 }

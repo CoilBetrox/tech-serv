@@ -16,6 +16,10 @@ public class TechnicalServiceMapper {
         dto.setEntryDate(s.getEntryDate());
         dto.setEstimatedCost(s.getEstimatedCost());
         dto.setCreatedAt(s.getCreatedAt());
+        dto.setReceivedAt(s.getReceivedAt());
+        dto.setInProgressAt(s.getInProgressAt());
+        dto.setFinalizedAt(s.getFinalizedAt());
+        dto.setDeliveredAt(s.getDeliveredAt());
         if (s.getAdmin() != null) {
             dto.setAdminId(s.getAdmin().getId());
         }
@@ -35,6 +39,7 @@ public class TechnicalServiceMapper {
                 cd.setId(customer.getId());
                 cd.setFirstName(customer.getFirstName());
                 cd.setLastName(customer.getLastName());
+                cd.setEmail(customer.getEmail());
                 cd.setPhone(customer.getPhone());
                 dd.setCustomer(cd);
             }

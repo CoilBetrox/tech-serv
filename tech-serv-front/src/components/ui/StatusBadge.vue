@@ -20,19 +20,19 @@ const props = defineProps({
 
 const statusConfig = {
   pending: {
-    text: 'Pending',
+    text: 'Pendiente',
     classes: 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 border-amber-100 dark:border-amber-900/50'
   },
   in_process: {
-    text: 'In Process',
+    text: 'En proceso',
     classes: 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-100 dark:border-blue-900/50'
   },
   finished: {
-    text: 'Finished',
+    text: 'Finalizado',
     classes: 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-900/50'
   },
   delivered: {
-    text: 'Delivered',
+    text: 'Entregado',
     classes: 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border-purple-100 dark:border-purple-900/50'
   },
   recibido: {

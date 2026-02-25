@@ -42,10 +42,10 @@ const props = defineProps({
 })
 
 const steps = [
-  { key: 'received', label: 'Received', icon: 'check', date: '' },
-  { key: 'in_progress', label: 'In Progress', icon: 'engineering', date: '' },
-  { key: 'ready', label: 'Ready', icon: 'inventory_2', date: '' },
-  { key: 'delivered', label: 'Delivered', icon: 'handshake', date: '' }
+  { key: 'received', label: 'Recibido', icon: 'check', date: '' },
+  { key: 'in_progress', label: 'En proceso', icon: 'engineering', date: '' },
+  { key: 'ready', label: 'Finalizado', icon: 'inventory_2', date: '' },
+  { key: 'delivered', label: 'Entregado', icon: 'handshake', date: '' }
 ]
 
 // Mapear historial a steps

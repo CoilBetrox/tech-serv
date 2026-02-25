@@ -16,7 +16,6 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.nio.charset.StandardCharsets;
@@ -57,6 +56,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login").permitAll()
                 .requestMatchers("/api/v1/services/search/**").permitAll()
+                .requestMatchers("/api/v1/services/ticket/**").permitAll()
                 .requestMatchers("/api/v1/users/**", "/api/v1/services/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
             )

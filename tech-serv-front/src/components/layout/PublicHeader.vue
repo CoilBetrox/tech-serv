@@ -12,15 +12,15 @@
     
     <div class="flex flex-1 justify-end gap-8">
       <div class="hidden md:flex items-center gap-9">
-        <router-link to="/" class="text-sm font-medium leading-normal hover:text-primary transition-colors">Home</router-link>
-        <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Services</a>
-        <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Contact</a>
+        <router-link to="/" class="text-sm font-medium leading-normal hover:text-primary transition-colors">Inicio</router-link>
+        <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Servicios</a>
+        <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Contacto</a>
       </div>
       <router-link 
         to="/admin/login"
         class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em]"
       >
-        <span class="truncate">Staff Login</span>
+        <span class="truncate">Ingreso de personal</span>
       </router-link>
     </div>
   </header>

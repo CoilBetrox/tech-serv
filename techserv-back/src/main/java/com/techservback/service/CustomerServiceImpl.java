@@ -29,4 +29,10 @@ public class CustomerServiceImpl implements ICustomerService {
     public Optional<Customer> getCustomerById(Long id) {
         return customerRepository.findById(id);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Customer> findByEmail(String email) {
+        return customerRepository.findFirstByEmail(email);
+    }
 }
