@@ -45,6 +45,9 @@ export const useOrderStore = defineStore('orders', () => {
       inProgressAt: apiOrder.inProgressAt,
       finalizedAt: apiOrder.finalizedAt,
       deliveredAt: apiOrder.deliveredAt,
+      inProgressMessage: apiOrder.inProgressMessage,
+      finalizedMessage: apiOrder.finalizedMessage,
+      deliveredMessage: apiOrder.deliveredMessage,
       createdAt: apiOrder.createdAt
     }
   }
@@ -84,12 +87,12 @@ export const useOrderStore = defineStore('orders', () => {
     return mapped.id
   }
 
-  async function updateOrderStatus(ticketId, backendStatus) {
+  async function updateOrderStatus(ticketId, backendStatus, message = null) {
     const order = orders.value.find(o => o.id === ticketId)
     if (!order) throw new Error('Orden no encontrada en memoria')
 
     const token = localStorage.getItem('token')
-    const updated = await orderService.updateOrderStatus(token, order.dbId, backendStatus)
+    const updated = await orderService.updateOrderStatus(token, order.dbId, backendStatus, message)
     const mapped = mapApiOrderToUi(updated)
 
     const index = orders.value.findIndex(o => o.id === ticketId)

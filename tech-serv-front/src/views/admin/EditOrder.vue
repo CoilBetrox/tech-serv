@@ -37,16 +37,27 @@
             </div>
           </div>
 
-          <div class="flex flex-col gap-2 max-w-md">
-            <label class="text-sm font-semibold text-slate-900 dark:text-white">Estado</label>
-            <select
-              v-model="selectedStatus"
-              class="h-11 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-slate-900 dark:text-white focus:ring-primary"
-            >
-              <option v-for="option in statusOptions" :key="option.value" :value="option.value">
-                {{ option.label }}
-              </option>
-            </select>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-2">
+              <label class="text-sm font-semibold text-slate-900 dark:text-white">Estado</label>
+              <select
+                v-model="selectedStatus"
+                class="h-11 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-slate-900 dark:text-white focus:ring-primary"
+              >
+                <option v-for="option in statusOptions" :key="option.value" :value="option.value">
+                  {{ option.label }}
+                </option>
+              </select>
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="text-sm font-semibold text-slate-900 dark:text-white">Mensaje (opcional)</label>
+              <textarea
+                v-model="statusMessage"
+                placeholder="Agrega un mensaje sobre este cambio de estado..."
+                rows="2"
+                class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-900 dark:text-white focus:ring-primary resize-none"
+              ></textarea>
+            </div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
@@ -113,6 +124,7 @@ const saving = ref(false)
 const error = ref('')
 const message = ref('')
 const selectedStatus = ref('RECIBIDO')
+const statusMessage = ref('')
 
 const statusOptions = [
   { value: 'RECIBIDO', label: 'Recibido' },
@@ -144,8 +156,13 @@ async function saveChanges() {
 
   try {
     const backendStatus = mapUiToBackendStatus(selectedStatus.value)
-    const updated = await orderStore.updateOrderStatus(order.value.id, backendStatus)
+    const updated = await orderStore.updateOrderStatus(
+      order.value.id, 
+      backendStatus,
+      statusMessage.value.trim() || null
+    )
     order.value = updated
+    statusMessage.value = '' // Limpiar mensaje después de guardar
     message.value = 'Estado actualizado correctamente. Ya puedes verificarlo en Consulta rápida por ticket.'
   } catch (err) {
     console.error('Error al actualizar estado:', err)

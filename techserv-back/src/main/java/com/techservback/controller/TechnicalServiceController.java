@@ -118,7 +118,7 @@ public class TechnicalServiceController {
     @PatchMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateServiceStatus(@PathVariable Long id, @RequestBody StatusUpdateRequest request) {
-        TechnicalService updated = technicalServiceService.updateServiceStatus(id, request.getStatus());
+        TechnicalService updated = technicalServiceService.updateServiceStatus(id, request.getStatus(), request.getMessage());
         return ResponseEntity.ok(com.techservback.dto.TechnicalServiceMapper.toDto(updated));
     }
 
@@ -173,13 +173,17 @@ public class TechnicalServiceController {
     // DTO Class
     static class StatusUpdateRequest {
         private String status;
+        private String message;
 
         public StatusUpdateRequest() {}
-        public StatusUpdateRequest(String status) {
+        public StatusUpdateRequest(String status, String message) {
             this.status = status;
+            this.message = message;
         }
 
         public String getStatus() { return status; }
         public void setStatus(String status) { this.status = status; }
+        public String getMessage() { return message; }
+        public void setMessage(String message) { this.message = message; }
     }
 }

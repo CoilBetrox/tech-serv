@@ -11,7 +11,7 @@ public interface ITechnicalServiceService {
     List<TechnicalService> getMyServices(Long customerId);
     List<TechnicalService> searchServices(String query);
     Optional<TechnicalService> getByTicketCode(String ticketCode);
-    TechnicalService updateServiceStatus(Long id, String status);
+    TechnicalService updateServiceStatus(Long id, String status, String message);
     List<TechnicalService> getAllServices();
     
     // NUEVO: Obtener órdenes creadas por un ADMIN

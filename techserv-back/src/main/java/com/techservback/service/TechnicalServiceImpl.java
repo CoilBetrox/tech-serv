@@ -93,7 +93,7 @@ public class TechnicalServiceImpl implements ITechnicalServiceService {
 
     @Override
     @Transactional
-    public TechnicalService updateServiceStatus(Long id, String status) {
+    public TechnicalService updateServiceStatus(Long id, String status, String message) {
         TechnicalService service = technicalServiceRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Service not found"));
         String normalizedStatus = normalizeStatus(status);
@@ -101,9 +101,10 @@ public class TechnicalServiceImpl implements ITechnicalServiceService {
             throw new IllegalArgumentException("Status must not be empty");
         }
 
-        log.info("Updating service {} status to: {}", id, normalizedStatus);
+        log.info("Updating service {} status to: {} with message: {}", id, normalizedStatus, message);
         service.setStatus(normalizedStatus);
         applyStatusDates(service, normalizedStatus);
+        applyStatusMessage(service, normalizedStatus, message);
         return technicalServiceRepository.save(service);
     }
 
@@ -149,6 +150,31 @@ public class TechnicalServiceImpl implements ITechnicalServiceService {
             }
             default -> {
                 // no-op for unknown statuses
+            }
+        }
+    }
+
+    private void applyStatusMessage(TechnicalService service, String status, String message) {
+        if (message == null || message.trim().isEmpty()) {
+            return; // No message to apply
+        }
+
+        switch (normalizeStatus(status)) {
+            case "EN_DIAGNOSTICO", "EN_REPARACION" -> {
+                service.setInProgressMessage(message);
+                log.info("Applied message to inProgressMessage");
+            }
+            case "LISTO_PARA_ENTREGA" -> {
+                service.setFinalizedMessage(message);
+                log.info("Applied message to finalizedMessage");
+            }
+            case "ENTREGADO" -> {
+                service.setDeliveredMessage(message);
+                log.info("Applied message to deliveredMessage");
+            }
+            default -> {
+                // Para RECIBIDO u otros estados, no se guarda mensaje (usa description)
+                log.debug("No specific message field for status: {}", status);
             }
         }
     }

@@ -115,8 +115,36 @@
             <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-slate-400">description</span>
               <div>
-                <p class="text-xs text-slate-400">Falla</p>
+                <p class="text-xs text-slate-400">Falla reportada</p>
                 <p class="text-sm font-medium dark:text-white">{{ ticketData.issue }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Historial de actualizaciones del técnico -->
+          <div v-if="ticketData.updates && ticketData.updates.length" class="mt-8">
+            <div class="flex items-center gap-2 mb-4">
+              <span class="material-symbols-outlined text-primary">history</span>
+              <h4 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Actualizaciones del técnico</h4>
+            </div>
+            <div class="space-y-3">
+              <div 
+                v-for="(update, index) in ticketData.updates" 
+                :key="index"
+                class="p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50"
+              >
+                <div class="flex items-start gap-3">
+                  <div class="mt-0.5">
+                    <div class="size-2 rounded-full bg-primary"></div>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class="text-xs font-bold text-primary uppercase">{{ update.stage }}</span>
+                      <span v-if="update.date" class="text-xs text-slate-400">• {{ update.date }}</span>
+                    </div>
+                    <p class="text-sm text-slate-700 dark:text-slate-300">{{ update.message }}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -185,7 +213,8 @@ async function searchTicket() {
       lastActivity: data?.createdAt
         ? `Creado el ${new Date(data.createdAt).toLocaleString('es-ES')}`
         : 'Sin actividad reciente',
-      history: buildHistory(mappedStatus, data)
+      history: buildHistory(mappedStatus, data),
+      updates: buildUpdates(mappedStatus, data)
     }
   } catch (err) {
     error.value = err?.message || 'Ocurrió un error. Inténtalo más tarde.'
@@ -234,6 +263,51 @@ function formatStepDate(value) {
   const parsed = new Date(value)
   if (Number.isNaN(parsed.getTime())) return ''
   return parsed.toLocaleString('es-ES')
+}
+
+function buildUpdates(status, data) {
+  const updates = []
+  
+  // Mensaje inicial (Recibido)
+  if (data?.description) {
+    updates.push({
+      stage: 'Recibido',
+      message: data.description,
+      date: formatStepDate(data?.receivedAt || data?.entryDate)
+    })
+  }
+  
+  // Mensaje de en proceso (solo si ya pasó por este estado)
+  const statusOrder = ['received', 'in_progress', 'ready', 'delivered']
+  const currentIndex = statusOrder.indexOf(status)
+  
+  if (currentIndex >= 1 && data?.inProgressMessage) {
+    updates.push({
+      stage: 'En proceso',
+      message: data.inProgressMessage,
+      date: formatStepDate(data?.inProgressAt)
+    })
+  }
+  
+  // Mensaje de finalizado (solo si ya pasó por este estado)
+  if (currentIndex >= 2 && data?.finalizedMessage) {
+    updates.push({
+      stage: 'Finalizado',
+      message: data.finalizedMessage,
+      date: formatStepDate(data?.finalizedAt)
+    })
+  }
+  
+  // Mensaje de entregado (solo si ya pasó por este estado)
+  if (currentIndex >= 3 && data?.deliveredMessage) {
+    updates.push({
+      stage: 'Entregado',
+      message: data.deliveredMessage,
+      date: formatStepDate(data?.deliveredAt)
+    })
+  }
+  
+  return updates
 }
 
 // Utilidades
