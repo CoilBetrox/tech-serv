@@ -14,10 +14,10 @@
         <!-- Título -->
         <div class="w-full text-center mb-10">
           <h1 class="text-[#0d131b] dark:text-white tracking-light text-[36px] font-bold leading-tight pb-2">
-            Quick Status Inquiry
+            Consulta rápida de estado
           </h1>
           <p class="text-[#4c6c9a] dark:text-slate-400 text-lg font-normal leading-normal max-w-[600px] mx-auto">
-            Track your device repair in real-time. Enter your ticket number below to get started.
+            Consulta el estado de la reparación en tiempo real. Ingresa tu número de ticket para comenzar.
           </p>
         </div>
         
@@ -27,7 +27,7 @@
             <div class="flex-1 w-full">
               <label class="flex flex-col w-full">
                 <p class="text-[#0d131b] dark:text-slate-200 text-sm font-semibold leading-normal pb-2 uppercase tracking-wider">
-                  Ticket Number
+                  Número de ticket
                 </p>
                 <div class="relative group">
                   <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#4c6c9a] dark:text-slate-500">
@@ -50,7 +50,7 @@
               :disabled="loading || !ticketNumber"
             >
               <span v-if="loading" class="animate-spin material-symbols-outlined mr-2">hourglass_empty</span>
-              <span class="truncate">{{ loading ? 'Searching...' : 'Check Status' }}</span>
+              <span class="truncate">{{ loading ? 'Buscando...' : 'Consultar estado' }}</span>
             </button>
           </form>
           
@@ -79,7 +79,7 @@
             
             <div class="mt-4 sm:mt-0 flex items-center gap-2">
               <div class="flex flex-col items-end">
-                <span class="text-xs text-[#4c6c9a] dark:text-slate-500 uppercase font-bold tracking-widest">Current Status</span>
+                <span class="text-xs text-[#4c6c9a] dark:text-slate-500 uppercase font-bold tracking-widest">Estado actual</span>
                 <span class="text-primary font-bold">{{ formatStatus(ticketData.status) }}</span>
               </div>
               <div class="size-10 bg-primary/10 rounded-full flex items-center justify-center text-primary">
@@ -96,7 +96,7 @@
             <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-primary mt-0.5">update</span>
               <div>
-                <p class="text-xs font-bold text-[#4c6c9a] uppercase tracking-tighter">Last Activity</p>
+                <p class="text-xs font-bold text-[#4c6c9a] uppercase tracking-tighter">Última actividad</p>
                 <p class="text-sm font-semibold dark:text-white">{{ ticketData.lastActivity }}</p>
               </div>
             </div>
@@ -107,7 +107,7 @@
             <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-slate-400">phone</span>
               <div>
-                <p class="text-xs text-slate-400">Contact</p>
+                <p class="text-xs text-slate-400">Contacto</p>
                 <p class="text-sm font-medium dark:text-white">{{ ticketData.phone }}</p>
               </div>
             </div>
@@ -115,7 +115,7 @@
             <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-slate-400">description</span>
               <div>
-                <p class="text-xs text-slate-400">Issue</p>
+                <p class="text-xs text-slate-400">Falla</p>
                 <p class="text-sm font-medium dark:text-white">{{ ticketData.issue }}</p>
               </div>
             </div>
@@ -124,15 +124,15 @@
         
         <!-- Mensaje de ayuda (siempre visible) -->
         <div class="mt-8 flex flex-col items-center text-center">
-          <p class="text-[#4c6c9a] text-sm">Need help or didn't find your ticket?</p>
+          <p class="text-[#4c6c9a] text-sm">¿Necesitas ayuda o no encontraste tu ticket?</p>
           <div class="flex gap-4 mt-2">
             <a class="text-primary text-sm font-bold flex items-center gap-1 hover:underline underline-offset-4" href="#">
               <span class="material-symbols-outlined text-sm">call</span>
-              Contact Shop
+              Contactar taller
             </a>
             <a class="text-primary text-sm font-bold flex items-center gap-1 hover:underline underline-offset-4" href="#">
               <span class="material-symbols-outlined text-sm">help_outline</span>
-              Support Center
+              Centro de ayuda
             </a>
           </div>
         </div>
@@ -148,6 +148,7 @@ import { ref } from 'vue'
 import PublicHeader from '../../components/layout/PublicHeader.vue'
 import Footer from '../../components/layout/Footer.vue'
 import StatusStepper from '../../components/ui/StatusStepper.vue'
+import { publicService } from '../../services/api'
 
 // Estado
 const ticketNumber = ref('')
@@ -161,51 +162,87 @@ async function searchTicket() {
   
   loading.value = true
   error.value = ''
+  ticketData.value = null
   
   try {
-    // Aquí irá la llamada real a tu backend
-    // const response = await fetch(`/api/public/tickets/${ticketNumber.value}`)
-    // const data = await response.json()
-    
-    // SIMULACIÓN: Datos de ejemplo
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    if (ticketNumber.value.toUpperCase() === 'TIC-98721') {
-      ticketData.value = {
-        id: 'TIC-98721',
-        clientName: 'Alex Johnson',
-        device: 'MacBook Pro 16" - Screen Repair',
-        phone: '+1 (555) 123-4567',
-        issue: 'Screen flickering and battery not charging',
-        status: 'in_progress',
-        lastActivity: 'Replaced display ribbon cable. Running diagnostics.',
-        history: [
-          { status: 'received', date: 'Oct 20, 09:15 AM' },
-          { status: 'in_progress', date: 'Oct 21, 02:30 PM' },
-          { status: 'ready', date: 'Oct 21, 02:30 PM' }
-        ]
-      }
-      error.value = ''
-    } else {
-      // Simular ticket no encontrado
-      ticketData.value = null
-      error.value = `Ticket ${ticketNumber.value} not found. Please check the number and try again.`
+    const data = await publicService.getTicketStatus(ticketNumber.value.trim().toUpperCase())
+    const mappedStatus = normalizeStatus(data?.status)
+    const deviceBrand = data?.device?.brand || ''
+    const deviceModel = data?.device?.model || ''
+    const deviceType = data?.device?.type || ''
+    const deviceText = [deviceBrand, deviceModel || deviceType].filter(Boolean).join(' - ') || 'Dispositivo'
+    const customerName = [data?.device?.customer?.firstName, data?.device?.customer?.lastName]
+      .filter(Boolean)
+      .join(' ') || 'Cliente'
+
+    ticketData.value = {
+      id: data?.ticketCode || ticketNumber.value.trim().toUpperCase(),
+      clientName: customerName,
+      device: deviceText,
+      phone: data?.device?.customer?.phone || 'No disponible',
+      issue: data?.description || 'Sin descripción de falla',
+      status: mappedStatus,
+      lastActivity: data?.createdAt
+        ? `Creado el ${new Date(data.createdAt).toLocaleString('es-ES')}`
+        : 'Sin actividad reciente',
+      history: buildHistory(mappedStatus, data)
     }
   } catch (err) {
-    error.value = 'An error occurred. Please try again later.'
+    error.value = err?.message || 'Ocurrió un error. Inténtalo más tarde.'
     ticketData.value = null
   } finally {
     loading.value = false
   }
 }
 
+function normalizeStatus(status) {
+  const normalized = (status || '').toUpperCase()
+  const map = {
+    RECIBIDO: 'received',
+    EN_DIAGNOSTICO: 'in_progress',
+    EN_REPARACION: 'in_progress',
+    LISTO_PARA_ENTREGA: 'ready',
+    ENTREGADO: 'delivered'
+  }
+  return map[normalized] || 'in_progress'
+}
+
+function buildHistory(status, data) {
+  const steps = ['received', 'in_progress', 'ready', 'delivered']
+  const activeIndex = steps.indexOf(status)
+  if (activeIndex < 0) return []
+
+  const datesByStep = {
+    received: formatStepDate(data?.receivedAt || data?.entryDate),
+    in_progress: formatStepDate(data?.inProgressAt),
+    ready: formatStepDate(data?.finalizedAt),
+    delivered: formatStepDate(data?.deliveredAt)
+  }
+
+  return steps.slice(0, activeIndex + 1).map(step => ({
+    status: step,
+    date: datesByStep[step] || ''
+  }))
+}
+
+function formatStepDate(value) {
+  if (!value) return ''
+  if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    const [year, month, day] = value.split('-')
+    return `${day}/${month}/${year}`
+  }
+  const parsed = new Date(value)
+  if (Number.isNaN(parsed.getTime())) return ''
+  return parsed.toLocaleString('es-ES')
+}
+
 // Utilidades
 function formatStatus(status) {
   const statusMap = {
-    'received': 'Received',
-    'in_progress': 'In Progress',
-    'ready': 'Ready for Pickup',
-    'delivered': 'Delivered'
+    'received': 'Recibido',
+    'in_progress': 'En proceso',
+    'ready': 'Finalizado',
+    'delivered': 'Entregado'
   }
   return statusMap[status] || status
 }

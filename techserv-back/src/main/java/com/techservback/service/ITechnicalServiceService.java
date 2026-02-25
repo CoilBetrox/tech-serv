@@ -10,6 +10,7 @@ public interface ITechnicalServiceService {
     Optional<TechnicalService> getServiceById(Long id);
     List<TechnicalService> getMyServices(Long customerId);
     List<TechnicalService> searchServices(String query);
+    Optional<TechnicalService> getByTicketCode(String ticketCode);
     TechnicalService updateServiceStatus(Long id, String status);
     List<TechnicalService> getAllServices();
     

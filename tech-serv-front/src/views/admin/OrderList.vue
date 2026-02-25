@@ -8,10 +8,10 @@
         <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
           <div class="flex min-w-72 flex-col gap-2">
             <h1 class="text-slate-900 dark:text-white text-4xl font-black leading-tight tracking-tight">
-              Service Management
+              Gestión de servicios
             </h1>
             <p class="text-slate-500 dark:text-slate-400 text-base font-normal">
-              Track and manage repair orders for your technical service shop.
+              Seguimiento y administración de órdenes de reparación.
             </p>
           </div>
           
@@ -20,7 +20,7 @@
             class="flex min-w-[140px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-11 px-5 bg-primary text-white text-sm font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all"
           >
             <span class="material-symbols-outlined text-[20px]">add</span>
-            <span class="truncate">Create Ticket</span>
+            <span class="truncate">Crear ticket</span>
           </router-link>
         </div>
         
@@ -35,7 +35,7 @@
                 <input 
                   v-model="orderStore.filters.search"
                   class="block w-full pl-10 pr-3 py-2.5 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm placeholder:text-slate-400 focus:ring-primary focus:border-primary dark:text-white" 
-                  placeholder="Search by Ticket ID or Client Name..." 
+                  placeholder="Buscar por ticket o nombre del cliente..." 
                   type="text"
                 />
               </label>
@@ -43,7 +43,7 @@
             
             <div class="flex items-center gap-3 overflow-x-auto pb-1 lg:pb-0">
               <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-2 hidden sm:block">
-                Filter by Status
+                Filtrar por estado
               </span>
               
               <button 
@@ -71,12 +71,12 @@
             <table class="w-full text-left border-collapse">
               <thead>
                 <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
-                  <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Ticket ID</th>
-                  <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Client Name</th>
-                  <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Device</th>
-                  <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Date</th>
-                  <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
-                  <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">Actions</th>
+                  <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Ticket</th>
+                  <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Cliente</th>
+                  <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Dispositivo</th>
+                  <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Fecha</th>
+                  <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Estado</th>
+                  <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">Acciones</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
@@ -131,7 +131,7 @@
           <!-- Paginación -->
           <div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
             <span class="text-sm text-slate-500 dark:text-slate-400 font-medium">
-              Showing 1 to {{ orderStore.filteredOrders.length }} of {{ orderStore.filteredOrders.length }} tickets
+              Mostrando 1 a {{ orderStore.filteredOrders.length }} de {{ orderStore.filteredOrders.length }} tickets
             </span>
             <!-- Paginación aquí -->
           </div>
@@ -159,10 +159,11 @@ onMounted(async () => {
 })
 
 const filterOptions = [
-  { value: 'all', label: 'All' },
-  { value: 'recibido', label: 'Received' },
-  { value: 'en_proceso', label: 'In Process' },
-  { value: 'finalizado', label: 'Finished' }
+  { value: 'all', label: 'Todos' },
+  { value: 'recibido', label: 'Recibido' },
+  { value: 'en_proceso', label: 'En proceso' },
+  { value: 'finalizado', label: 'Finalizado' },
+  { value: 'entregado', label: 'Entregado' }
 ]
 
 function filterButtonClasses(status) {

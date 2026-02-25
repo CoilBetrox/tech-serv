@@ -31,6 +31,18 @@ public class TechnicalService {
     private LocalDate entryDate;
     private Double estimatedCost;
 
+    @Column(name = "received_at")
+    private LocalDateTime receivedAt;
+
+    @Column(name = "in_progress_at")
+    private LocalDateTime inProgressAt;
+
+    @Column(name = "finalized_at")
+    private LocalDateTime finalizedAt;
+
+    @Column(name = "delivered_at")
+    private LocalDateTime deliveredAt;
+
     @ManyToOne
     @JoinColumn(name = "device_id")
     private Device device;

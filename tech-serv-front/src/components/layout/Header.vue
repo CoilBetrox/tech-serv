@@ -18,13 +18,13 @@
           class="text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors"
           :class="{'text-primary border-b-2 border-primary py-1': $route.name === 'order-list'}"
         >
-          Orders
+          Órdenes
         </router-link>
         <router-link 
           to="/admin/customers" 
           class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors"
         >
-          Customers
+          Clientes
         </router-link>
       </nav>
       
@@ -39,7 +39,7 @@
           @click="logout"
           class="text-sm text-slate-600 dark:text-slate-300 hover:text-primary"
         >
-          Logout
+          Cerrar sesión
         </button>
       </div>
     </div>

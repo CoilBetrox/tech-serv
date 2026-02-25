@@ -1,7 +1,6 @@
 package com.techservback.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -126,6 +125,14 @@ public class TechnicalServiceController {
         List<TechnicalService> services = technicalServiceService.searchServices(query);
         var dtos = services.stream().map(com.techservback.dto.TechnicalServiceMapper::toDto).toList();
         return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/ticket/{ticketCode}")
+    public ResponseEntity<?> getByTicketCode(@PathVariable String ticketCode) {
+        return technicalServiceService.getByTicketCode(ticketCode)
+                .map(com.techservback.dto.TechnicalServiceMapper::toDto)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // NUEVO ENDPOINT: Obtener órdenes creadas por el ADMIN logueado

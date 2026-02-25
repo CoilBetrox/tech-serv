@@ -8,6 +8,7 @@ import com.techservback.repository.model.TechnicalService;
 public interface ITechnicalServiceRepository extends CrudRepository<TechnicalService, Long> {
     List<TechnicalService> findByDeviceCustomerId(Long customerId);
     List<TechnicalService> findByTicketCodeContaining(String ticketCode);
+    java.util.Optional<TechnicalService> findByTicketCode(String ticketCode);
     List<TechnicalService> findByDescriptionContaining(String description);
     
     // NUEVO: Buscar órdenes creadas por un ADMIN específico

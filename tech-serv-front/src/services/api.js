@@ -70,6 +70,20 @@ export const orderService = {
     })
     return handleResponse(response)
   },
+
+  async findCustomerByEmail(token, email) {
+    const response = await fetch(`${API_BASE_URL}/customers/by-email?email=${encodeURIComponent(email)}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+
+    if (response.status === 404) {
+      return null
+    }
+
+    return handleResponse(response)
+  },
   
   async updateOrder(token, id, orderData) {
     const response = await fetch(`${API_BASE_URL}/services/${id}`, {
@@ -96,7 +110,7 @@ export const orderService = {
 // Servicio público para tickets (sin token)
 export const publicService = {
   async getTicketStatus(ticketNumber) {
-    const response = await fetch(`${API_BASE_URL}/services/search/${ticketNumber}`)
+    const response = await fetch(`${API_BASE_URL}/services/ticket/${encodeURIComponent(ticketNumber)}`)
     return handleResponse(response)
   }
 }

@@ -21,11 +21,11 @@
         
         <!-- Mensaje -->
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-3">
-          Page Not Found
+          Página no encontrada
         </h2>
         
         <p class="text-slate-500 dark:text-slate-400 text-lg mb-8 max-w-md mx-auto">
-          The page you're looking for doesn't exist or has been moved. Let's get you back on track.
+          La página que buscas no existe o fue movida. Te ayudamos a volver al flujo principal.
         </p>
         
         <!-- Opciones de navegación -->
@@ -35,7 +35,7 @@
             class="inline-flex items-center justify-center gap-2 px-6 h-12 bg-primary text-white rounded-lg font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
           >
             <span class="material-symbols-outlined">home</span>
-            Go to Home
+            Ir al inicio
           </router-link>
           
           <router-link 
@@ -43,20 +43,20 @@
             class="inline-flex items-center justify-center gap-2 px-6 h-12 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
           >
             <span class="material-symbols-outlined">assignment</span>
-            Admin Dashboard
+            Panel de administración
           </router-link>
         </div>
         
         <!-- Acciones rápidas -->
         <div class="mt-12 pt-8 border-t border-slate-100 dark:border-slate-800">
-          <p class="text-sm text-slate-400 mb-4">Quick Actions</p>
+          <p class="text-sm text-slate-400 mb-4">Acciones rápidas</p>
           <div class="flex flex-wrap gap-3 justify-center">
             <router-link 
               to="/"
               class="text-xs text-slate-500 hover:text-primary transition-colors flex items-center gap-1"
             >
               <span class="material-symbols-outlined text-sm">search</span>
-              Check Ticket Status
+              Consultar estado del ticket
             </router-link>
             <span class="text-slate-300">•</span>
             <router-link 
@@ -64,7 +64,7 @@
               class="text-xs text-slate-500 hover:text-primary transition-colors flex items-center gap-1"
             >
               <span class="material-symbols-outlined text-sm">login</span>
-              Staff Login
+              Ingreso de personal
             </router-link>
             <span class="text-slate-300">•</span>
             <a 
@@ -72,7 +72,7 @@
               class="text-xs text-slate-500 hover:text-primary transition-colors flex items-center gap-1"
             >
               <span class="material-symbols-outlined text-sm">support</span>
-              Support Center
+              Centro de ayuda
             </a>
           </div>
         </div>
@@ -80,7 +80,7 @@
       
       <!-- Footer -->
       <p class="text-slate-400 text-xs mt-8">
-        © 2024 TechFix Manager. All rights reserved.
+        © 2024 TechFix Manager. Todos los derechos reservados.
       </p>
     </div>
   </div>

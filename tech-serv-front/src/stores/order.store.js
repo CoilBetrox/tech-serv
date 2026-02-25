@@ -11,16 +11,28 @@ export const useOrderStore = defineStore('orders', () => {
     status: 'all'
   })
 
+  function mapBackendStatusToUi(status) {
+    const normalized = (status || '').toUpperCase()
+    const map = {
+      RECIBIDO: 'recibido',
+      EN_DIAGNOSTICO: 'en_proceso',
+      EN_REPARACION: 'en_proceso',
+      LISTO_PARA_ENTREGA: 'finalizado',
+      ENTREGADO: 'entregado'
+    }
+    return map[normalized] || 'recibido'
+  }
+
   function mapApiOrderToUi(apiOrder) {
     return {
       id: apiOrder.ticketCode,
       dbId: apiOrder.id,
       clientName: `${apiOrder.device.customer.firstName} ${apiOrder.device.customer.lastName}`,
       device: `${apiOrder.device.brand} ${apiOrder.device.model}`,
-      date: new Date(apiOrder.createdAt).toLocaleDateString('en-US', { 
+      date: new Date(apiOrder.createdAt).toLocaleDateString('es-ES', {
         month: 'short', day: 'numeric', year: 'numeric' 
       }),
-      status: apiOrder.status.toLowerCase(),
+      status: mapBackendStatusToUi(apiOrder.status),
       phone: apiOrder.device.customer.phone,
       description: apiOrder.description,
       estimatedCost: apiOrder.estimatedCost
@@ -54,15 +66,12 @@ export const useOrderStore = defineStore('orders', () => {
     })
   })
   
-  function createOrder(newOrder) {
-    const order = {
-      id: `TK-${1000 + orders.value.length + 1}`,
-      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-      status: 'pending',
-      ...newOrder
-    }
-    orders.value.unshift(order)
-    return order.id
+  async function createOrder(payload) {
+    const token = localStorage.getItem('token')
+    const created = await orderService.createOrder(token, payload)
+    const mapped = mapApiOrderToUi(created)
+    orders.value.unshift(mapped)
+    return mapped.id
   }
   
   function updateOrder(id, updates) {
