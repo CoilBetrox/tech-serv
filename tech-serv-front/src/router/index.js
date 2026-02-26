@@ -10,6 +10,7 @@ import Login from '../views/admin/Login.vue'
 import OrderList from '../views/admin/OrderList.vue'
 import CreateOrder from '../views/admin/CreateOrder.vue'
 import EditOrder from '../views/admin/EditOrder.vue'
+import CustomerList from '../views/admin/CustomerList.vue'
 
 const routes = [
   // Rutas públicas
@@ -42,6 +43,12 @@ const routes = [
     path: '/admin/orders/:id',
     name: 'edit-order',
     component: EditOrder,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin/customers',
+    name: 'customer-list',
+    component: CustomerList,
     meta: { requiresAuth: true }
   },
   

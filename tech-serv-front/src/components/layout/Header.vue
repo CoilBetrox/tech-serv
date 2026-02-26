@@ -15,7 +15,7 @@
       <nav class="hidden md:flex items-center gap-8">
         <router-link 
           to="/admin/orders" 
-          class="text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors"
+          class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors"
           :class="{'text-primary border-b-2 border-primary py-1': $route.name === 'order-list'}"
         >
           Órdenes
@@ -23,6 +23,7 @@
         <router-link 
           to="/admin/customers" 
           class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors"
+          :class="{'text-primary border-b-2 border-primary py-1': $route.name === 'customer-list'}"
         >
           Clientes
         </router-link>

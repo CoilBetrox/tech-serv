@@ -213,14 +213,15 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { reactive, ref, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useOrderStore } from '../../stores/order.store'
 import { orderService } from '../../services/api'
 import Header from '../../components/layout/Header.vue'
 import Footer from '../../components/layout/Footer.vue'
 
 const router = useRouter()
+const route = useRoute()
 const orderStore = useOrderStore()
 const loading = ref(false)
 
@@ -238,6 +239,26 @@ const form = reactive({
     serialNumber: '',
     estimatedCost: 0,
     problem: ''
+  }
+})
+
+onMounted(async () => {
+  const customerId = route.query.customerId
+  if (!customerId) return
+
+  try {
+    const token = localStorage.getItem('token')
+    const customers = await orderService.getMyCustomers(token)
+    const selectedCustomer = customers.find(c => String(c.id) === String(customerId))
+
+    if (!selectedCustomer) return
+
+    form.client.email = selectedCustomer.email || ''
+    form.client.firstName = selectedCustomer.firstName || ''
+    form.client.lastName = selectedCustomer.lastName || ''
+    form.client.phone = selectedCustomer.phone || ''
+  } catch (error) {
+    console.error('Error al precargar cliente seleccionado:', error)
   }
 })
 

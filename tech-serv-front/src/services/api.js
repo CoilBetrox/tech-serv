@@ -84,6 +84,15 @@ export const orderService = {
 
     return handleResponse(response)
   },
+
+  async getMyCustomers(token) {
+    const response = await fetch(`${API_BASE_URL}/customers/my-customers`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    return handleResponse(response)
+  },
   
   async updateOrderStatus(token, id, status, message = null) {
     const payload = { status }
