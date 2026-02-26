@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class TechnicalServiceImpl implements ITechnicalServiceService {
+
+    private static final String TICKET_PREFIX = "TKT-";
+    private static final String TICKET_CHARSET = "ABCDEFGHJKLMNPQRSTUVWXYZ123456789";
+    private static final int TICKET_BODY_LENGTH = 8;
+    private static final int MAX_TICKET_GENERATION_ATTEMPTS = 25;
 
     final private ITechnicalServiceRepository technicalServiceRepository;
 
@@ -33,7 +38,7 @@ public class TechnicalServiceImpl implements ITechnicalServiceService {
         
         // Auto-generate ticket code if not provided
         if (service.getTicketCode() == null || service.getTicketCode().isEmpty()) {
-            service.setTicketCode("TKT-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+            service.setTicketCode(generateReadableTicketCode());
         }
         
         // Set initial status if not provided
@@ -177,6 +182,23 @@ public class TechnicalServiceImpl implements ITechnicalServiceService {
                 log.debug("No specific message field for status: {}", status);
             }
         }
+    }
+
+    private String generateReadableTicketCode() {
+        for (int attempt = 0; attempt < MAX_TICKET_GENERATION_ATTEMPTS; attempt++) {
+            StringBuilder body = new StringBuilder(TICKET_BODY_LENGTH);
+            for (int i = 0; i < TICKET_BODY_LENGTH; i++) {
+                int index = ThreadLocalRandom.current().nextInt(TICKET_CHARSET.length());
+                body.append(TICKET_CHARSET.charAt(index));
+            }
+
+            String candidate = TICKET_PREFIX + body;
+            if (technicalServiceRepository.findByTicketCode(candidate).isEmpty()) {
+                return candidate;
+            }
+        }
+
+        throw new IllegalStateException("No se pudo generar un código de ticket único");
     }
 
 }

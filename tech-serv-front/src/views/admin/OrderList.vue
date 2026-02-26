@@ -199,6 +199,58 @@
           </div>
         </div>
       </div>
+
+      <div
+        v-if="isModalOpen && selectedOrder"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 px-4"
+        @click.self="closeOrderModal"
+      >
+        <div class="w-full max-w-md rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl">
+          <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 px-5 py-4">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Detalle de orden</h3>
+            <button
+              type="button"
+              class="rounded-md p-1 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200"
+              @click="closeOrderModal"
+              aria-label="Cerrar"
+            >
+              <span class="material-symbols-outlined text-[20px]">close</span>
+            </button>
+          </div>
+
+          <div class="space-y-4 px-5 py-4">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Código de ticket</p>
+              <p class="font-mono text-sm font-bold text-primary">{{ selectedOrder.id }}</p>
+            </div>
+
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Dispositivo</p>
+              <p class="text-sm font-medium text-slate-800 dark:text-slate-200">{{ selectedOrder.device }}</p>
+            </div>
+
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Cliente</p>
+              <p class="text-sm font-medium text-slate-800 dark:text-slate-200">{{ selectedOrder.clientName }}</p>
+            </div>
+
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Fecha</p>
+              <p class="text-sm font-medium text-slate-800 dark:text-slate-200">{{ selectedOrder.date }}</p>
+            </div>
+          </div>
+
+          <div class="border-t border-slate-200 dark:border-slate-800 px-5 py-3 flex justify-end">
+            <button
+              type="button"
+              class="h-10 rounded-lg px-4 text-sm font-semibold text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
+              @click="closeOrderModal"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
     </main>
     
     <Footer />
@@ -206,7 +258,7 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useOrderStore } from '../../stores/order.store'
 import { useUIStore } from '../../stores/ui.store'
 import Header from '../../components/layout/Header.vue'
@@ -215,6 +267,8 @@ import StatusBadge from '../../components/ui/StatusBadge.vue'
 
 const orderStore = useOrderStore()
 const uiStore = useUIStore()
+const isModalOpen = ref(false)
+const selectedOrder = ref(null)
 
 onMounted(async () => {
   await orderStore.fetchOrders()
@@ -240,7 +294,14 @@ function getInitials(name) {
 }
 
 function openOrderModal(orderId) {
-  // Implementar modal para vista rápida
-  console.log('Open modal for order:', orderId)
+  const order = orderStore.orders.find(o => o.id === orderId)
+  if (!order) return
+  selectedOrder.value = order
+  isModalOpen.value = true
+}
+
+function closeOrderModal() {
+  isModalOpen.value = false
+  selectedOrder.value = null
 }
 </script>
