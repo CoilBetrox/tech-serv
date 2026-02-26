@@ -5,19 +5,19 @@
     <main class="flex flex-1 justify-center py-8">
       <div class="layout-content-container flex flex-col max-w-[1200px] flex-1 px-4 lg:px-10">
         <!-- Header con título y botón -->
-        <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
-          <div class="flex min-w-72 flex-col gap-2">
-            <h1 class="text-slate-900 dark:text-white text-4xl font-black leading-tight tracking-tight">
+        <div class="flex flex-col sm:flex-row flex-wrap items-start sm:items-end justify-between gap-4 mb-8">
+          <div class="flex flex-col gap-2">
+            <h1 class="text-slate-900 dark:text-white text-3xl sm:text-4xl font-black leading-tight tracking-tight">
               Gestión de servicios
             </h1>
-            <p class="text-slate-500 dark:text-slate-400 text-base font-normal">
+            <p class="text-slate-500 dark:text-slate-400 text-sm sm:text-base font-normal">
               Seguimiento y administración de órdenes de reparación.
             </p>
           </div>
           
           <router-link 
             to="/admin/orders/create"
-            class="flex min-w-[140px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-11 px-5 bg-primary text-white text-sm font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all"
+            class="flex w-full sm:w-auto min-w-[140px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-11 px-5 bg-primary text-white text-sm font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all"
           >
             <span class="material-symbols-outlined text-[20px]">add</span>
             <span class="truncate">Crear ticket</span>
@@ -25,48 +25,47 @@
         </div>
         
         <!-- Filtros y búsqueda -->
-        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 mb-6 shadow-sm">
-          <div class="flex flex-col lg:flex-row justify-between gap-6">
-            <div class="flex flex-1 max-w-md">
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3 sm:p-4 mb-6 shadow-sm">
+          <div class="flex flex-col gap-4">
+            <div class="flex flex-1 w-full">
               <label class="relative w-full">
                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
                   <span class="material-symbols-outlined text-[20px]">search</span>
                 </span>
                 <input 
                   v-model="orderStore.filters.search"
-                  class="block w-full pl-10 pr-3 py-2.5 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm placeholder:text-slate-400 focus:ring-primary focus:border-primary dark:text-white" 
-                  placeholder="Buscar por ticket o nombre del cliente..." 
+                  class="block w-full pl-10 pr-3 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm placeholder:text-slate-400 focus:ring-primary focus:border-primary dark:text-white" 
+                  placeholder="Buscar por ticket o nombre..." 
                   type="text"
                 />
               </label>
             </div>
             
-            <div class="flex items-center gap-3 overflow-x-auto pb-1 lg:pb-0">
-              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-2 hidden sm:block">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 overflow-x-auto pb-1 sm:pb-0">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider hidden sm:block">
                 Filtrar por estado
               </span>
               
-              <button 
-                v-for="filterOption in filterOptions"
-                :key="filterOption.value"
-                @click="orderStore.filters.status = filterOption.value"
-                class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg px-4 text-sm font-medium transition-colors"
-                :class="filterButtonClasses(filterOption.value)"
-              >
-                {{ filterOption.label }}
-              </button>
+              <div class="flex flex-wrap gap-2 w-full sm:w-auto">
+                <button 
+                  v-for="filterOption in filterOptions"
+                  :key="filterOption.value"
+                  @click="orderStore.filters.status = filterOption.value"
+                  class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg px-3 sm:px-4 text-xs sm:text-sm font-medium transition-colors whitespace-nowrap"
+                  :class="filterButtonClasses(filterOption.value)"
+                >
+                  {{ filterOption.label }}
+                </button>
+              </div>
               
-              <div class="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
-              
-              <button class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">
+              <button class="hidden sm:flex size-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 ml-auto">
                 <span class="material-symbols-outlined text-[20px]">filter_list</span>
               </button>
             </div>
           </div>
         </div>
-        
-        <!-- Tabla de órdenes -->
-        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+        <!-- Tabla de órdenes (Desktop) y Tarjetas (Mobile) -->
+        <div class="hidden md:block bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
           <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
               <thead>
@@ -86,7 +85,7 @@
                   class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors group"
                 >
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <span class="font-mono font-bold text-primary">{{ order.id }}</span>
+                    <span class="font-mono font-bold text-primary text-sm">{{ order.id }}</span>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center gap-3">
@@ -128,12 +127,75 @@
             </table>
           </div>
           
-          <!-- Paginación -->
+          <!-- Paginación Desktop -->
           <div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
             <span class="text-sm text-slate-500 dark:text-slate-400 font-medium">
               Mostrando 1 a {{ orderStore.filteredOrders.length }} de {{ orderStore.filteredOrders.length }} tickets
             </span>
-            <!-- Paginación aquí -->
+          </div>
+        </div>
+
+        <!-- Vista de tarjetas para Mobile (md:hidden) -->
+        <div class="md:hidden space-y-3">
+          <div 
+            v-if="orderStore.filteredOrders.length === 0"
+            class="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-6 text-center"
+          >
+            <p class="text-slate-500 dark:text-slate-400 text-sm">No hay órdenes para mostrar</p>
+          </div>
+
+          <div 
+            v-for="order in orderStore.filteredOrders" 
+            :key="order.id"
+            class="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-4 shadow-sm hover:shadow-md transition-shadow"
+          >
+            <!-- Header de tarjeta -->
+            <div class="flex items-start justify-between mb-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+              <div class="flex flex-col gap-1 flex-1 min-w-0">
+                <span class="font-mono font-bold text-primary text-sm">{{ order.id }}</span>
+                <div class="flex items-center gap-2 min-w-0">
+                  <div class="size-6 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-600 dark:text-slate-300 flex-shrink-0">
+                    {{ getInitials(order.clientName) }}
+                  </div>
+                  <span class="text-sm font-medium text-slate-900 dark:text-slate-200 truncate">
+                    {{ order.clientName }}
+                  </span>
+                </div>
+              </div>
+              <div class="flex-shrink-0 ml-2">
+                <StatusBadge :status="order.status" />
+              </div>
+            </div>
+
+            <!-- Detalles de tarjeta -->
+            <div class="space-y-2 mb-4">
+              <div class="flex flex-col gap-0.5">
+                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Dispositivo</p>
+                <p class="text-sm text-slate-700 dark:text-slate-300">{{ order.device }}</p>
+              </div>
+              <div class="flex flex-col gap-0.5">
+                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Fecha</p>
+                <p class="text-sm text-slate-700 dark:text-slate-300">{{ order.date }}</p>
+              </div>
+            </div>
+
+            <!-- Acciones de tarjeta -->
+            <div class="flex gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+              <button 
+                @click="openOrderModal(order.id)"
+                class="flex-1 flex items-center justify-center gap-2 h-9 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-primary hover:text-white transition-all text-sm font-medium"
+              >
+                <span class="material-symbols-outlined text-[16px]">visibility</span>
+                Ver
+              </button>
+              <router-link 
+                :to="`/admin/orders/${order.id}`"
+                class="flex-1 flex items-center justify-center gap-2 h-9 rounded-lg bg-primary text-white hover:bg-primary/90 transition-all text-sm font-medium"
+              >
+                <span class="material-symbols-outlined text-[16px]">edit</span>
+                Editar
+              </router-link>
+            </div>
           </div>
         </div>
       </div>
