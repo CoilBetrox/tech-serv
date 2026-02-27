@@ -5,6 +5,7 @@
       <div class="flex gap-6">
         <router-link class="text-xs text-slate-400 hover:text-primary" to="/terminos">Términos</router-link>
         <router-link class="text-xs text-slate-400 hover:text-primary" to="/privacidad">Privacidad</router-link>
+      </div>
     </div>
   </footer>
 </template>
