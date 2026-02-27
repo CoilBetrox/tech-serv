@@ -80,7 +80,7 @@
       
       <!-- Footer -->
       <p class="text-slate-400 text-xs mt-8">
-        © 2024 TechFix Manager. Todos los derechos reservados.
+        © 2026 TechService. Todos los derechos reservados.
       </p>
     </div>
   </div>

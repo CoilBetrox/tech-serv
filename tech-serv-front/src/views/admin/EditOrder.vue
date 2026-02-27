@@ -106,6 +106,33 @@
               {{ saving ? 'Guardando...' : 'Guardar cambios' }}
             </button>
           </div>
+
+          <div v-if="orderUpdates.length" class="pt-2">
+            <div class="flex items-center gap-2 mb-4">
+              <span class="material-symbols-outlined text-primary">history</span>
+              <h4 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Actualizaciones del técnico</h4>
+            </div>
+            <div class="space-y-3">
+              <div
+                v-for="(update, index) in orderUpdates"
+                :key="index"
+                class="p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50"
+              >
+                <div class="flex items-start gap-3">
+                  <div class="mt-0.5">
+                    <div class="size-2 rounded-full bg-primary"></div>
+                  </div>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class="text-xs font-bold text-primary uppercase">{{ update.stage }}</span>
+                      <span v-if="update.date" class="text-xs text-slate-400">• {{ update.date }}</span>
+                    </div>
+                    <p class="text-sm text-slate-700 dark:text-slate-300">{{ update.message }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         
         <div v-else class="text-center py-12">
@@ -235,6 +262,49 @@ function statusRank(uiStatus) {
 const isDeliveredLocked = computed(() => {
   if (!order.value?.backendStatus) return false
   return mapBackendToUiStatus(order.value.backendStatus) === 'ENTREGADO'
+})
+
+const orderUpdates = computed(() => {
+  if (!order.value) return []
+
+  const updates = []
+  const statusOrder = ['RECIBIDO', 'EN_PROCESO', 'FINALIZADO', 'ENTREGADO']
+  const currentUiStatus = mapBackendToUiStatus(order.value.backendStatus)
+  const currentIndex = statusOrder.indexOf(currentUiStatus)
+
+  if (order.value.description) {
+    updates.push({
+      stage: 'Recibido',
+      message: order.value.description,
+      date: formatDate(order.value.receivedAt)
+    })
+  }
+
+  if (currentIndex >= 1 && order.value.inProgressMessage) {
+    updates.push({
+      stage: 'En proceso',
+      message: order.value.inProgressMessage,
+      date: formatDate(order.value.inProgressAt)
+    })
+  }
+
+  if (currentIndex >= 2 && order.value.finalizedMessage) {
+    updates.push({
+      stage: 'Finalizado',
+      message: order.value.finalizedMessage,
+      date: formatDate(order.value.finalizedAt)
+    })
+  }
+
+  if (currentIndex >= 3 && order.value.deliveredMessage) {
+    updates.push({
+      stage: 'Entregado',
+      message: order.value.deliveredMessage,
+      date: formatDate(order.value.deliveredAt)
+    })
+  }
+
+  return updates
 })
 
 function canSelectStatus(targetUiStatus) {

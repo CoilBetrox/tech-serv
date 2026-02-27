@@ -1,7 +1,7 @@
 package com.techservback.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
@@ -30,11 +30,13 @@ public class TechnicalServiceImpl implements ITechnicalServiceService {
 
     @Override
     @Transactional
-    public TechnicalService createService(TechnicalService service) {
+    public TechnicalService createService(TechnicalService service, String clientTimeZone) {
         // Validar que admin esté asignado
         if (service.getAdmin() == null) {
             throw new IllegalArgumentException("Admin debe ser especificado al crear la orden");
         }
+
+        LocalDateTime now = nowInClientZone(clientTimeZone);
         
         // Auto-generate ticket code if not provided
         if (service.getTicketCode() == null || service.getTicketCode().isEmpty()) {
@@ -50,10 +52,14 @@ public class TechnicalServiceImpl implements ITechnicalServiceService {
         
         // Set entry date if not provided
         if (service.getEntryDate() == null) {
-            service.setEntryDate(LocalDate.now());
+            service.setEntryDate(now.toLocalDate());
         }
 
-        applyStatusDates(service, service.getStatus());
+        if (service.getCreatedAt() == null) {
+            service.setCreatedAt(now);
+        }
+
+        applyStatusDates(service, service.getStatus(), now);
         
         log.info("Creating technical service - Ticket: {} - Admin: {} - Device: {}", 
             service.getTicketCode(), 
@@ -98,7 +104,7 @@ public class TechnicalServiceImpl implements ITechnicalServiceService {
 
     @Override
     @Transactional
-    public TechnicalService updateServiceStatus(Long id, String status, String message) {
+    public TechnicalService updateServiceStatus(Long id, String status, String message, String clientTimeZone) {
         TechnicalService service = technicalServiceRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Service not found"));
         String normalizedStatus = normalizeStatus(status);
@@ -107,10 +113,11 @@ public class TechnicalServiceImpl implements ITechnicalServiceService {
         }
 
         validateStatusTransition(service.getStatus(), normalizedStatus);
+        LocalDateTime now = nowInClientZone(clientTimeZone);
 
         log.info("Updating service {} status to: {} with message: {}", id, normalizedStatus, message);
         service.setStatus(normalizedStatus);
-        applyStatusDates(service, normalizedStatus);
+        applyStatusDates(service, normalizedStatus, now);
         applyStatusMessage(service, normalizedStatus, message);
         return technicalServiceRepository.save(service);
     }
@@ -133,8 +140,7 @@ public class TechnicalServiceImpl implements ITechnicalServiceService {
         return status == null ? "" : status.trim().toUpperCase();
     }
 
-    private void applyStatusDates(TechnicalService service, String status) {
-        LocalDateTime now = LocalDateTime.now();
+    private void applyStatusDates(TechnicalService service, String status, LocalDateTime now) {
 
         switch (normalizeStatus(status)) {
             case "RECIBIDO" -> {
@@ -227,6 +233,19 @@ public class TechnicalServiceImpl implements ITechnicalServiceService {
             case "ENTREGADO" -> 3;
             default -> throw new IllegalArgumentException("Estado no soportado: " + status);
         };
+    }
+
+    private LocalDateTime nowInClientZone(String clientTimeZone) {
+        if (clientTimeZone == null || clientTimeZone.isBlank()) {
+            return LocalDateTime.now();
+        }
+
+        try {
+            return LocalDateTime.now(ZoneId.of(clientTimeZone));
+        } catch (Exception ex) {
+            log.warn("Invalid timezone header '{}', falling back to server time", clientTimeZone);
+            return LocalDateTime.now();
+        }
     }
 
 }
