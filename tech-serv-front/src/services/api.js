@@ -3,6 +3,10 @@ const API_BASE_URL = window.location.hostname === 'localhost'
   ? 'http://localhost:8080/api/v1' 
   : '/api/v1';
 
+function getClientTimeZone() {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'
+}
+
 // Helper para manejar respuestas
 async function handleResponse(response) {
   const data = await response.json()
@@ -64,7 +68,8 @@ export const orderService = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`,
+        'X-Timezone': getClientTimeZone()
       },
       body: JSON.stringify(orderData)
     })
@@ -104,7 +109,8 @@ export const orderService = {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`,
+        'X-Timezone': getClientTimeZone()
       },
       body: JSON.stringify(payload)
     })

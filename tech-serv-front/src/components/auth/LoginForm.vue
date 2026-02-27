@@ -5,7 +5,7 @@
         <span class="material-symbols-outlined text-primary text-4xl">build_circle</span>
       </div>
       <h1 class="text-[#0d131b] dark:text-white tracking-tight text-[28px] font-bold leading-tight px-4">
-        TechFix Manager
+        TechService
       </h1>
       <p class="text-[#4c6c9a] dark:text-slate-400 text-sm font-medium mt-1">Portal de técnicos</p>
     </div>

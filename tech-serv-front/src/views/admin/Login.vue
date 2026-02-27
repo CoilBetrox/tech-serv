@@ -9,7 +9,7 @@
       <LoginForm @success="onLoginSuccess" />
       
       <p class="text-white/60 text-[10px] text-center mt-6 font-medium uppercase tracking-[2px]">
-        © 2024 TechFix Manager v2.4.0
+        © 2026 TechService v1.0.9
       </p>
     </div>
   </div>
