@@ -72,8 +72,9 @@
                 <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
                   <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Ticket</th>
                   <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Cliente</th>
-                  <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Dispositivo</th>
+                  <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Requerimiento</th>
                   <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Fecha</th>
+                  <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Costo estimado</th>
                   <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Estado</th>
                   <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">Acciones</th>
                 </tr>
@@ -102,6 +103,9 @@
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 dark:text-slate-400">
                     {{ order.date }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-700 dark:text-slate-300">
+                    {{ formatCurrency(order.estimatedCost) }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <StatusBadge :status="order.status" />
@@ -170,12 +174,16 @@
             <!-- Detalles de tarjeta -->
             <div class="space-y-2 mb-4">
               <div class="flex flex-col gap-0.5">
-                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Dispositivo</p>
+                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Requerimiento</p>
                 <p class="text-sm text-slate-700 dark:text-slate-300">{{ order.device }}</p>
               </div>
               <div class="flex flex-col gap-0.5">
                 <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Fecha</p>
                 <p class="text-sm text-slate-700 dark:text-slate-300">{{ order.date }}</p>
+              </div>
+              <div class="flex flex-col gap-0.5">
+                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Costo estimado</p>
+                <p class="text-sm text-slate-700 dark:text-slate-300">{{ formatCurrency(order.estimatedCost) }}</p>
               </div>
             </div>
 
@@ -221,11 +229,11 @@
           <div class="space-y-4 px-5 py-4">
             <div>
               <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Código de ticket</p>
-              <p class="font-mono text-sm font-bold text-primary">{{ selectedOrder.id }}</p>
+              <p class="font-mono text-xl sm:text-2xl font-extrabold tracking-wide text-primary">{{ selectedOrder.id }}</p>
             </div>
 
             <div>
-              <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Dispositivo</p>
+              <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Requerimiento</p>
               <p class="text-sm font-medium text-slate-800 dark:text-slate-200">{{ selectedOrder.device }}</p>
             </div>
 
@@ -303,5 +311,14 @@ function openOrderModal(orderId) {
 function closeOrderModal() {
   isModalOpen.value = false
   selectedOrder.value = null
+}
+
+function formatCurrency(value) {
+  const amount = Number(value)
+  if (Number.isNaN(amount)) return '—'
+  return new Intl.NumberFormat('es-EC', {
+    style: 'currency',
+    currency: 'USD'
+  }).format(amount)
 }
 </script>

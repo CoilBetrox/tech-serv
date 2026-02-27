@@ -29,6 +29,9 @@ public class User {
 
     private String role; // "ADMIN" o "CUSTOMER"
 
+    @Column(name = "time_zone")
+    private String timeZone = "UTC";
+
     // NUEVO: Relación inversa - órdenes creadas por este usuario ADMIN
     @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
     @JsonIgnore
