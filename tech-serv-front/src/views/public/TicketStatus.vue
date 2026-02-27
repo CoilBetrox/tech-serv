@@ -116,7 +116,7 @@
               <span class="material-symbols-outlined text-slate-400">description</span>
               <div>
                 <p class="text-xs text-slate-400">Falla reportada</p>
-                <p class="text-sm font-medium dark:text-white">{{ ticketData.issue }}</p>
+                <p class="text-sm font-medium dark:text-white whitespace-pre-wrap break-words [overflow-wrap:anywhere] leading-relaxed">{{ ticketData.issue }}</p>
               </div>
             </div>
           </div>
@@ -137,12 +137,12 @@
                   <div class="mt-0.5">
                     <div class="size-2 rounded-full bg-primary"></div>
                   </div>
-                  <div class="flex-1">
+                  <div class="flex-1 min-w-0">
                     <div class="flex items-center gap-2 mb-1">
                       <span class="text-xs font-bold text-primary uppercase">{{ update.stage }}</span>
                       <span v-if="update.date" class="text-xs text-slate-400">• {{ update.date }}</span>
                     </div>
-                    <p class="text-sm text-slate-700 dark:text-slate-300">{{ update.message }}</p>
+                    <p class="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap break-words [overflow-wrap:anywhere] leading-relaxed">{{ update.message }}</p>
                   </div>
                 </div>
               </div>

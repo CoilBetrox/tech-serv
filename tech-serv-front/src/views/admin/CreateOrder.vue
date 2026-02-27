@@ -47,6 +47,7 @@
                   class="form-input flex-1 rounded-l-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-1 focus:ring-primary border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 px-4 text-base placeholder:text-slate-400" 
                   placeholder="customer@example.com" 
                   type="email"
+                  maxlength="40"
                   required
                 />
                 <div 
@@ -68,6 +69,7 @@
                     class="form-input rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 h-12 px-4 text-slate-900 dark:text-white focus:ring-primary" 
                     placeholder="Nombre" 
                     type="text"
+                    maxlength="30"
                     required
                   />
                 </div>
@@ -79,6 +81,7 @@
                     class="form-input rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 h-12 px-4 text-slate-900 dark:text-white focus:ring-primary" 
                     placeholder="Apellido" 
                     type="text"
+                    maxlength="30"
                     required
                   />
                 </div>
@@ -91,6 +94,7 @@
                   class="form-input rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 h-12 px-4 text-slate-900 dark:text-white focus:ring-primary" 
                   placeholder="+1 (555) 000-0000" 
                   type="tel"
+                  maxlength="17"
                   required
                 />
               </div>
@@ -102,6 +106,7 @@
                   class="form-input rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 px-4 text-slate-900 dark:text-white focus:ring-primary" 
                   placeholder="Teléfono secundario o persona de contacto" 
                   type="text"
+                  maxlength="40"
                 />
               </div>
             </div>
@@ -123,6 +128,7 @@
                     class="form-input rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 px-4 text-slate-900 dark:text-white focus:ring-primary" 
                     placeholder="e.g., Apple, Dell, Lenovo" 
                     type="text"
+                    maxlength="40"
                     required
                   />
                 </div>
@@ -134,6 +140,7 @@
                     class="form-input rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 px-4 text-slate-900 dark:text-white focus:ring-primary" 
                     placeholder="e.g., MacBook Pro M3" 
                     type="text"
+                    maxlength="40"
                     required
                   />
                 </div>
@@ -146,6 +153,7 @@
                       class="form-input w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 px-4 text-slate-900 dark:text-white focus:ring-primary" 
                       placeholder="S/N: 123456789" 
                       type="text"
+                      maxlength="20"
                       required
                     />
                     <span 
@@ -168,6 +176,7 @@
                       type="number"
                       step="0.01"
                       min="0"
+                      max="9999"
                       required
                     />
                   </div>
@@ -180,6 +189,7 @@
                   v-model="form.device.problem"
                   class="form-textarea rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 min-h-[160px] p-4 text-slate-900 dark:text-white focus:ring-primary placeholder:text-slate-400" 
                   placeholder="Describe el problema en detalle. ¿Qué ocurrió? ¿Hay códigos de error?"
+                  maxlength="240"
                   required
                 ></textarea>
               </div>
