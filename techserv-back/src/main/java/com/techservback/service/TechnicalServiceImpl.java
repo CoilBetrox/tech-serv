@@ -106,6 +106,8 @@ public class TechnicalServiceImpl implements ITechnicalServiceService {
             throw new IllegalArgumentException("Status must not be empty");
         }
 
+        validateStatusTransition(service.getStatus(), normalizedStatus);
+
         log.info("Updating service {} status to: {} with message: {}", id, normalizedStatus, message);
         service.setStatus(normalizedStatus);
         applyStatusDates(service, normalizedStatus);
@@ -199,6 +201,32 @@ public class TechnicalServiceImpl implements ITechnicalServiceService {
         }
 
         throw new IllegalStateException("No se pudo generar un código de ticket único");
+    }
+
+    private void validateStatusTransition(String currentStatus, String targetStatus) {
+        String current = normalizeStatus(currentStatus);
+        String target = normalizeStatus(targetStatus);
+
+        if ("ENTREGADO".equals(current)) {
+            throw new IllegalStateException("La orden ya fue entregada y no permite más cambios");
+        }
+
+        int currentRank = getStatusRank(current);
+        int targetRank = getStatusRank(target);
+
+        if (targetRank < currentRank) {
+            throw new IllegalStateException("No se puede regresar a un estado anterior");
+        }
+    }
+
+    private int getStatusRank(String status) {
+        return switch (normalizeStatus(status)) {
+            case "RECIBIDO" -> 0;
+            case "EN_DIAGNOSTICO", "EN_REPARACION" -> 1;
+            case "LISTO_PARA_ENTREGA" -> 2;
+            case "ENTREGADO" -> 3;
+            default -> throw new IllegalArgumentException("Estado no soportado: " + status);
+        };
     }
 
 }
