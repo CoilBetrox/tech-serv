@@ -118,8 +118,12 @@ public class TechnicalServiceController {
     @PatchMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateServiceStatus(@PathVariable Long id, @RequestBody StatusUpdateRequest request) {
-        TechnicalService updated = technicalServiceService.updateServiceStatus(id, request.getStatus(), request.getMessage());
-        return ResponseEntity.ok(com.techservback.dto.TechnicalServiceMapper.toDto(updated));
+        try {
+            TechnicalService updated = technicalServiceService.updateServiceStatus(id, request.getStatus(), request.getMessage());
+            return ResponseEntity.ok(com.techservback.dto.TechnicalServiceMapper.toDto(updated));
+        } catch (IllegalArgumentException | IllegalStateException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @GetMapping("/search")

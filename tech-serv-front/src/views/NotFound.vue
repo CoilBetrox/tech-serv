@@ -64,7 +64,7 @@
               class="text-xs text-slate-500 hover:text-primary transition-colors flex items-center gap-1"
             >
               <span class="material-symbols-outlined text-sm">login</span>
-              Ingreso de personal
+              Login
             </router-link>
             <span class="text-slate-300">•</span>
             <a 

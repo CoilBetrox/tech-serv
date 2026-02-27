@@ -150,20 +150,6 @@
           </div>
         </div>
         
-        <!-- Mensaje de ayuda (siempre visible) -->
-        <div class="mt-8 flex flex-col items-center text-center">
-          <p class="text-[#4c6c9a] text-sm">¿Necesitas ayuda o no encontraste tu ticket?</p>
-          <div class="flex gap-4 mt-2">
-            <a class="text-primary text-sm font-bold flex items-center gap-1 hover:underline underline-offset-4" href="#">
-              <span class="material-symbols-outlined text-sm">call</span>
-              Contactar taller
-            </a>
-            <a class="text-primary text-sm font-bold flex items-center gap-1 hover:underline underline-offset-4" href="#">
-              <span class="material-symbols-outlined text-sm">help_outline</span>
-              Centro de ayuda
-            </a>
-          </div>
-        </div>
       </div>
     </main>
     

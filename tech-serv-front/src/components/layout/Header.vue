@@ -6,7 +6,7 @@
           <span class="material-symbols-outlined">rocket_launch</span>
         </div>
         <h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight">
-          TechService Pro
+          TechService
         </h2>
       </div>
     </div>

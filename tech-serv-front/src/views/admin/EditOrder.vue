@@ -42,9 +42,15 @@
               <label class="text-sm font-semibold text-slate-900 dark:text-white">Estado</label>
               <select
                 v-model="selectedStatus"
+                :disabled="isDeliveredLocked"
                 class="h-11 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-slate-900 dark:text-white focus:ring-primary"
               >
-                <option v-for="option in statusOptions" :key="option.value" :value="option.value">
+                <option
+                  v-for="option in statusOptions"
+                  :key="option.value"
+                  :value="option.value"
+                  :disabled="!canSelectStatus(option.value)"
+                >
                   {{ option.label }}
                 </option>
               </select>
@@ -53,12 +59,17 @@
               <label class="text-sm font-semibold text-slate-900 dark:text-white">Mensaje (opcional)</label>
               <textarea
                 v-model="statusMessage"
+                :disabled="isDeliveredLocked"
                 placeholder="Agrega un mensaje sobre este cambio de estado..."
                 rows="2"
                 class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-slate-900 dark:text-white focus:ring-primary resize-none"
               ></textarea>
             </div>
           </div>
+
+          <p v-if="isDeliveredLocked" class="text-sm text-amber-600 dark:text-amber-400">
+            La orden ya está entregada. No se permite modificar estado ni mensajes.
+          </p>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
             <div class="rounded-lg border border-slate-200 dark:border-slate-700 p-3">
@@ -89,7 +100,7 @@
             <button
               type="button"
               @click="saveChanges"
-              :disabled="saving"
+              :disabled="saving || isDeliveredLocked"
               class="px-6 h-12 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 transition-colors disabled:opacity-60"
             >
               {{ saving ? 'Guardando...' : 'Guardar cambios' }}
@@ -109,7 +120,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useOrderStore } from '../../stores/order.store'
 import Header from '../../components/layout/Header.vue'
@@ -149,6 +160,16 @@ onMounted(async () => {
 
 async function saveChanges() {
   if (!order.value) return
+
+  if (isDeliveredLocked.value) {
+    error.value = 'La orden ya fue entregada y no se puede modificar.'
+    return
+  }
+
+  if (!canSelectStatus(selectedStatus.value)) {
+    error.value = 'No se puede regresar a un estado anterior.'
+    return
+  }
 
   saving.value = true
   error.value = ''
@@ -199,5 +220,27 @@ function mapBackendToUiStatus(backendStatus) {
     ENTREGADO: 'ENTREGADO'
   }
   return map[normalized] || 'RECIBIDO'
+}
+
+function statusRank(uiStatus) {
+  const rankMap = {
+    RECIBIDO: 0,
+    EN_PROCESO: 1,
+    FINALIZADO: 2,
+    ENTREGADO: 3
+  }
+  return rankMap[uiStatus] ?? 0
+}
+
+const isDeliveredLocked = computed(() => {
+  if (!order.value?.backendStatus) return false
+  return mapBackendToUiStatus(order.value.backendStatus) === 'ENTREGADO'
+})
+
+function canSelectStatus(targetUiStatus) {
+  if (!order.value?.backendStatus) return true
+  if (isDeliveredLocked.value) return false
+  const currentUiStatus = mapBackendToUiStatus(order.value.backendStatus)
+  return statusRank(targetUiStatus) >= statusRank(currentUiStatus)
 }
 </script>
