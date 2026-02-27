@@ -3,6 +3,8 @@ import { useAuthStore } from '../stores/auth.store'
 
 // Vistas públicas
 import TicketStatus from '../views/public/TicketStatus.vue'
+import TermsView from '../views/public/TermsView.vue'
+import PrivacyView from '../views/public/PrivacyView.vue'
 import NotFound from '../views/NotFound.vue'
 
 // Vistas de admin
@@ -18,6 +20,16 @@ const routes = [
     path: '/',
     name: 'ticket-status',
     component: TicketStatus
+  },
+  {
+    path: '/terminos',
+    name: 'terms',
+    component: TermsView
+  },
+  {
+    path: '/privacidad',
+    name: 'privacy',
+    component: PrivacyView
   },
   
   // Rutas de admin
