@@ -115,7 +115,7 @@
             <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-slate-400">description</span>
               <div>
-                <p class="text-xs text-slate-400">Falla reportada</p>
+                <p class="text-xs text-slate-400">{{ ticketData.deviceType === 'SERVICE' ? 'Servicio' : 'Falla reportada' }}</p>
                 <p class="text-sm font-medium dark:text-white whitespace-pre-wrap break-words [overflow-wrap:anywhere] leading-relaxed">{{ ticketData.issue }}</p>
               </div>
             </div>
@@ -192,6 +192,7 @@ async function searchTicket() {
     ticketData.value = {
       id: data?.ticketCode || ticketNumber.value.trim().toUpperCase(),
       clientName: customerName,
+      deviceType: String(data?.device?.type || 'Device').toUpperCase(),
       device: deviceText,
       phone: data?.device?.customer?.phone || 'No disponible',
       issue: data?.description || 'Sin descripción de falla',
