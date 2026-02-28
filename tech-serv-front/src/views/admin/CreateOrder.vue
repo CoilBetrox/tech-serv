@@ -117,16 +117,46 @@
             <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col gap-6 shadow-sm">
               <h3 class="text-slate-900 dark:text-white text-xl font-bold flex items-center gap-2">
                 <span class="material-symbols-outlined text-primary">devices</span>
-                Detalles del dispositivo
+                {{ isServiceOrder ? 'Detalles del servicio' : 'Detalles del dispositivo' }}
               </h3>
+
+              <div class="flex flex-col gap-2">
+                <label class="text-slate-900 dark:text-white text-sm font-semibold">Tipo de orden *</label>
+                <div class="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    @click="orderType = 'Device'"
+                    :class="[
+                      'h-11 rounded-lg border text-sm font-semibold transition-colors',
+                      orderType === 'Device'
+                        ? 'border-primary bg-primary/10 text-primary'
+                        : 'border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300'
+                    ]"
+                  >
+                    Dispositivo
+                  </button>
+                  <button
+                    type="button"
+                    @click="orderType = 'Service'"
+                    :class="[
+                      'h-11 rounded-lg border text-sm font-semibold transition-colors',
+                      orderType === 'Service'
+                        ? 'border-primary bg-primary/10 text-primary'
+                        : 'border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300'
+                    ]"
+                  >
+                    Servicio
+                  </button>
+                </div>
+              </div>
               
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="flex flex-col gap-2">
-                  <label class="text-slate-900 dark:text-white text-sm font-semibold">Marca *</label>
+                  <label class="text-slate-900 dark:text-white text-sm font-semibold">{{ isServiceOrder ? 'Servicio *' : 'Marca *' }}</label>
                   <input 
                     v-model="form.device.brand"
                     class="form-input rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 px-4 text-slate-900 dark:text-white focus:ring-primary" 
-                    placeholder="e.g., Apple, Dell, Lenovo" 
+                    :placeholder="isServiceOrder ? 'e.g., Mantenimiento preventivo' : 'e.g., Apple, Dell, Lenovo'"
                     type="text"
                     maxlength="40"
                     required
@@ -134,14 +164,14 @@
                 </div>
                 
                 <div class="flex flex-col gap-2">
-                  <label class="text-slate-900 dark:text-white text-sm font-semibold">Modelo *</label>
+                  <label class="text-slate-900 dark:text-white text-sm font-semibold">{{ isServiceOrder ? 'Relacionado (opcional)' : 'Modelo *' }}</label>
                   <input 
                     v-model="form.device.model"
                     class="form-input rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 px-4 text-slate-900 dark:text-white focus:ring-primary" 
-                    placeholder="e.g., MacBook Pro M3" 
+                    :placeholder="isServiceOrder ? 'e.g., Equipo, área o referencia (opcional)' : 'e.g., MacBook Pro M3'"
                     type="text"
                     maxlength="40"
-                    required
+                    :required="!isServiceOrder"
                   />
                 </div>
                 
@@ -184,11 +214,11 @@
               </div>
               
               <div class="flex flex-col gap-2">
-                <label class="text-slate-900 dark:text-white text-sm font-semibold">Descripción del problema *</label>
+                <label class="text-slate-900 dark:text-white text-sm font-semibold">{{ isServiceOrder ? 'Descripción del servicio *' : 'Descripción del problema *' }}</label>
                 <textarea 
                   v-model="form.device.problem"
                   class="form-textarea rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 min-h-[160px] p-4 text-slate-900 dark:text-white focus:ring-primary placeholder:text-slate-400" 
-                  placeholder="Describe el problema en detalle. ¿Qué ocurrió? ¿Hay códigos de error?"
+                  :placeholder="isServiceOrder ? 'Describe el servicio solicitado en detalle.' : 'Describe el problema en detalle. ¿Qué ocurrió? ¿Hay códigos de error?'"
                   maxlength="240"
                   required
                 ></textarea>
@@ -223,7 +253,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useOrderStore } from '../../stores/order.store'
 import { orderService } from '../../services/api'
@@ -234,6 +264,8 @@ const router = useRouter()
 const route = useRoute()
 const orderStore = useOrderStore()
 const loading = ref(false)
+const orderType = ref('Device')
+const isServiceOrder = computed(() => orderType.value === 'Service')
 
 const form = reactive({
   client: {
@@ -302,9 +334,9 @@ async function handleSubmit() {
       description: form.device.problem,
       estimatedCost: form.device.estimatedCost,
       device: {
-        type: 'Device',
+        type: orderType.value,
         brand: form.device.brand,
-        model: form.device.model,
+        model: isServiceOrder.value ? (form.device.model || '') : form.device.model,
         serialNumber: form.device.serialNumber,
         customer: existingCustomer
           ? { id: existingCustomer.id }
