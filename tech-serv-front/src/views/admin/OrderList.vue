@@ -58,9 +58,6 @@
                 </button>
               </div>
               
-              <button class="hidden sm:flex size-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 ml-auto">
-                <span class="material-symbols-outlined text-[20px]">filter_list</span>
-              </button>
             </div>
           </div>
         </div>
@@ -71,8 +68,8 @@
               <thead>
                 <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
                   <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Ticket</th>
-                  <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Cliente</th>
-                  <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Requerimiento</th>
+                  <th class="w-56 px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Cliente</th>
+                  <th class="w-56 px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Requerimiento</th>
                   <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Fecha</th>
                   <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Costo estimado</th>
                   <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Estado</th>
@@ -88,7 +85,7 @@
                   <td class="px-6 py-4 whitespace-nowrap">
                     <span class="font-mono font-bold text-primary text-sm">{{ order.id }}</span>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
+                  <td class="w-56 px-6 py-4">
                     <div class="flex items-center gap-3">
                       <div class="size-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-600 dark:text-slate-300">
                         {{ getInitials(order.clientName) }}
@@ -98,8 +95,8 @@
                       </span>
                     </div>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <span class="text-sm text-slate-600 dark:text-slate-400">{{ order.device }}</span>
+                  <td class="w-56 px-6 py-4 align-top">
+                    <span class="text-sm text-slate-600 dark:text-slate-400 whitespace-normal break-words leading-relaxed">{{ order.device }}</span>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 dark:text-slate-400">
                     {{ order.date }}
@@ -217,6 +214,7 @@
           <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 px-5 py-4">
             <h3 class="text-lg font-bold text-slate-900 dark:text-white">Detalle de orden</h3>
             <button
+              v-if="!isCreatedOrderPreview"
               type="button"
               class="rounded-md p-1 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200"
               @click="closeOrderModal"
@@ -248,7 +246,7 @@
             </div>
           </div>
 
-          <div class="border-t border-slate-200 dark:border-slate-800 px-5 py-3 flex justify-end">
+          <div v-if="!isCreatedOrderPreview" class="border-t border-slate-200 dark:border-slate-800 px-5 py-3 flex justify-end">
             <button
               type="button"
               class="h-10 rounded-lg px-4 text-sm font-semibold text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
@@ -267,19 +265,32 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useOrderStore } from '../../stores/order.store'
 import { useUIStore } from '../../stores/ui.store'
 import Header from '../../components/layout/Header.vue'
 import Footer from '../../components/layout/Footer.vue'
 import StatusBadge from '../../components/ui/StatusBadge.vue'
 
+const route = useRoute()
+const router = useRouter()
 const orderStore = useOrderStore()
 const uiStore = useUIStore()
 const isModalOpen = ref(false)
 const selectedOrder = ref(null)
+const isCreatedOrderPreview = ref(false)
 
 onMounted(async () => {
   await orderStore.fetchOrders()
+
+  const createdTicket = route.query.createdTicket
+  if (!createdTicket) return
+
+  openOrderModal(String(createdTicket), true)
+
+  const nextQuery = { ...route.query }
+  delete nextQuery.createdTicket
+  router.replace({ query: nextQuery })
 })
 
 const filterOptions = [
@@ -301,16 +312,18 @@ function getInitials(name) {
   return name.split(' ').map(n => n[0]).join('').toUpperCase()
 }
 
-function openOrderModal(orderId) {
+function openOrderModal(orderId, createdPreview = false) {
   const order = orderStore.orders.find(o => o.id === orderId)
   if (!order) return
   selectedOrder.value = order
+  isCreatedOrderPreview.value = createdPreview
   isModalOpen.value = true
 }
 
 function closeOrderModal() {
   isModalOpen.value = false
   selectedOrder.value = null
+  isCreatedOrderPreview.value = false
 }
 
 function formatCurrency(value) {

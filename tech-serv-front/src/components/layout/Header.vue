@@ -1,5 +1,5 @@
 <template>
-  <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-3 lg:px-40">
+  <header class="relative flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-3 lg:px-40">
     <div class="flex items-center gap-8">
       <div class="flex items-center gap-4 text-primary">
         <div class="size-8 flex items-center justify-center rounded-lg bg-primary/10">
@@ -27,7 +27,23 @@
         >
           Clientes
         </router-link>
+        <router-link 
+          to="/admin/contacto" 
+          class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors"
+          :class="{'text-primary border-b-2 border-primary py-1': $route.name === 'admin-contact'}"
+        >
+          Contacto
+        </router-link>
       </nav>
+
+      <button
+        type="button"
+        class="md:hidden inline-flex items-center justify-center size-10 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300"
+        @click="isMobileMenuOpen = !isMobileMenuOpen"
+        aria-label="Abrir menú"
+      >
+        <span class="material-symbols-outlined">{{ isMobileMenuOpen ? 'close' : 'menu' }}</span>
+      </button>
       
       <div class="h-8 w-px bg-slate-200 dark:bg-slate-800 hidden md:block"></div>
       
@@ -44,20 +60,64 @@
         </button>
       </div>
     </div>
+
+    <div
+      v-if="isMobileMenuOpen"
+      class="absolute left-0 right-0 top-full z-50 md:hidden border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-4"
+    >
+      <nav class="flex flex-col gap-3">
+        <router-link
+          to="/admin/orders"
+          class="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-primary"
+        >
+          Órdenes
+        </router-link>
+        <router-link
+          to="/admin/customers"
+          class="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-primary"
+        >
+          Clientes
+        </router-link>
+        <router-link
+          to="/admin/contacto"
+          class="text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-primary"
+        >
+          Contacto
+        </router-link>
+        <button
+          type="button"
+          class="text-left text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-primary"
+          @click="logout"
+        >
+          Cerrar sesión
+        </button>
+      </nav>
+    </div>
   </header>
 </template>
 
 <script setup>
+import { ref, watch } from 'vue'
 import { useAuthStore } from '../../stores/auth.store'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
 const router = useRouter()
+const route = useRoute()
+const isMobileMenuOpen = ref(false)
 
 const userAvatar = 'https://lh3.googleusercontent.com/aida-public/AB6AXuD5d2YcXsXXuuF8YQhvhV9YYSIUowgqEYzhltZdE-qqinAC2xYSTxeM9DHZ11Wh064g52VMumq5IhK4MP4EcwivtZ46I39o6b4ZjC6383AFScc4YJI6f7oC2EIajzDiaWeJubtpe7WbTj7gWPMT59jlq4yle2OTgd8Nzid2r1IkI3PZOgmDHIq6VQ6UbB4ARdMxDZQq5A6ouiSnHmcQHammcv3rvRup_yoW6XoZ0l8a-K9-bOtAELJzXef0ooYr_yGyowJCr2Ut4E4u'
 
 function logout() {
+  isMobileMenuOpen.value = false
   authStore.logout()
   router.push('/admin/login')
 }
+
+watch(
+  () => route.fullPath,
+  () => {
+    isMobileMenuOpen.value = false
+  }
+)
 </script>

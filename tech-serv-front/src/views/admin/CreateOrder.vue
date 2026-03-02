@@ -32,9 +32,6 @@
                 <span class="material-symbols-outlined text-primary">person</span>
                 Información del cliente
               </h3>
-              <span class="bg-primary/10 text-primary text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded">
-                Cliente nuevo
-              </span>
             </div>
             
             <!-- Email con verificación -->
@@ -45,7 +42,7 @@
                   v-model="form.client.email"
                   @blur="checkExistingClient"
                   class="form-input flex-1 rounded-l-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-1 focus:ring-primary border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 px-4 text-base placeholder:text-slate-400" 
-                  placeholder="customer@example.com" 
+                  placeholder="cliente@mail.com" 
                   type="email"
                   maxlength="40"
                   required
@@ -92,21 +89,10 @@
                 <input 
                   v-model="form.client.phone"
                   class="form-input rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 h-12 px-4 text-slate-900 dark:text-white focus:ring-primary" 
-                  placeholder="+1 (555) 000-0000" 
+                  placeholder="(+593) 0000 0000 00" 
                   type="tel"
                   maxlength="17"
                   required
-                />
-              </div>
-              
-              <div class="flex flex-col gap-2">
-                <label class="text-slate-900 dark:text-white text-sm font-semibold">Contacto alternativo (opcional)</label>
-                <input 
-                  v-model="form.client.alternativePhone"
-                  class="form-input rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 px-4 text-slate-900 dark:text-white focus:ring-primary" 
-                  placeholder="Teléfono secundario o persona de contacto" 
-                  type="text"
-                  maxlength="40"
                 />
               </div>
             </div>
@@ -116,7 +102,7 @@
           <section class="lg:col-span-7 flex flex-col gap-6">
             <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col gap-6 shadow-sm">
               <h3 class="text-slate-900 dark:text-white text-xl font-bold flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary">devices</span>
+                <span class="material-symbols-outlined text-primary">{{ isServiceOrder ? 'handshake' : 'devices' }}</span>
                 {{ isServiceOrder ? 'Detalles del servicio' : 'Detalles del dispositivo' }}
               </h3>
 
@@ -247,14 +233,14 @@
         </form>
       </div>
     </main>
-    
+
     <Footer />
   </div>
 </template>
 
 <script setup>
 import { reactive, ref, onMounted, computed } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useOrderStore } from '../../stores/order.store'
 import { orderService } from '../../services/api'
 import Header from '../../components/layout/Header.vue'
@@ -349,10 +335,11 @@ async function handleSubmit() {
       }
     }
 
-    await orderStore.createOrder(orderPayload)
-    
-    // Redirigir a la lista de órdenes
-    router.push('/admin/orders')
+    const created = await orderStore.createOrder(orderPayload)
+    await router.push({
+      name: 'order-list',
+      query: { createdTicket: created.id }
+    })
     
   } catch (error) {
     console.error('Error al crear orden:', error)

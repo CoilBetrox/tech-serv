@@ -93,7 +93,7 @@
     </div>
     
     <div class="bg-slate-50 dark:bg-slate-800/50 py-4 px-8 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-[11px] text-[#4c6c9a] dark:text-slate-500 uppercase tracking-widest font-bold">
-      <a class="hover:text-primary transition-colors" href="#">Solicitar acceso</a>
+      <router-link class="hover:text-primary transition-colors" to="/contacto">Solicitar acceso</router-link>
       <span class="text-slate-300 dark:text-slate-700">|</span>
       <router-link class="hover:text-primary transition-colors" to="/privacidad">Política de privacidad</router-link>
     </div>
