@@ -5,6 +5,7 @@ import { useAuthStore } from '../stores/auth.store'
 import TicketStatus from '../views/public/TicketStatus.vue'
 import TermsView from '../views/public/TermsView.vue'
 import PrivacyView from '../views/public/PrivacyView.vue'
+import ContactView from '../views/public/ContactView.vue'
 import NotFound from '../views/NotFound.vue'
 
 // Vistas de admin
@@ -30,6 +31,11 @@ const routes = [
     path: '/privacidad',
     name: 'privacy',
     component: PrivacyView
+  },
+  {
+    path: '/contacto',
+    name: 'contact',
+    component: ContactView
   },
   
   // Rutas de admin
@@ -61,6 +67,12 @@ const routes = [
     path: '/admin/customers',
     name: 'customer-list',
     component: CustomerList,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin/contacto',
+    name: 'admin-contact',
+    component: ContactView,
     meta: { requiresAuth: true }
   },
   

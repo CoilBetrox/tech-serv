@@ -84,7 +84,7 @@ export const useOrderStore = defineStore('orders', () => {
     const created = await orderService.createOrder(token, payload)
     const mapped = mapApiOrderToUi(created)
     orders.value.unshift(mapped)
-    return mapped.id
+    return mapped
   }
 
   async function updateOrderStatus(ticketId, backendStatus, message = null) {
