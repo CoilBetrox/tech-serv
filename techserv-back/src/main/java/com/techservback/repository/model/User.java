@@ -5,9 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.CascadeType;
+import java.time.LocalDateTime;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -29,6 +32,21 @@ public class User {
 
     private String role; // "ADMIN" o "CUSTOMER"
 
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
+
+    @Column(name = "reset_token")
+    private String resetToken;
+
+    @Column(name = "token_expiration")
+    private LocalDateTime tokenExpiration;
+
     @Column(name = "time_zone")
     private String timeZone = "UTC";
 
@@ -41,4 +59,19 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Customer> customers;
+
+    @PrePersist
+    protected void onCreate() {
+        LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+        if (this.isActive == null) {
+            this.isActive = true;
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

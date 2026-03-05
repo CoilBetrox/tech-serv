@@ -8,5 +8,6 @@ import com.techservback.repository.model.User;
 
 public interface IUserRepository extends CrudRepository<User, Long> {
     Optional<User> findByEmail(String email);
+    Optional<User> findByResetToken(String resetToken);
 }
 

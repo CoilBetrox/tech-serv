@@ -102,4 +102,53 @@ public class AuthController {
         public String getRole() { return role; }
         public void setRole(String role) { this.role = role; }
     }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request) {
+        try {
+            authService.createPasswordResetToken(request.getEmail());
+            return ResponseEntity.ok(new MessageResponse("Si el correo existe, se ha enviado un enlace para restablecer la contraseña."));
+        } catch (Exception e) {
+            logger.error("Error in forgot-password flow for email {}: {}", request.getEmail(), e.getMessage(), e);
+            return ResponseEntity.status(500).body(new ErrorResponse("No se pudo procesar la solicitud"));
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
+        try {
+            authService.resetPassword(request.getToken(), request.getNewPassword());
+            return ResponseEntity.ok(new MessageResponse("Contraseña actualizada correctamente."));
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+    static class ForgotPasswordRequest {
+        private String email;
+
+        public String getEmail() { return email; }
+        public void setEmail(String email) { this.email = email; }
+    }
+
+    static class ResetPasswordRequest {
+        private String token;
+        private String newPassword;
+
+        public String getToken() { return token; }
+        public void setToken(String token) { this.token = token; }
+        public String getNewPassword() { return newPassword; }
+        public void setNewPassword(String newPassword) { this.newPassword = newPassword; }
+    }
+
+    static class MessageResponse {
+        private String message;
+
+        public MessageResponse(String message) {
+            this.message = message;
+        }
+
+        public String getMessage() { return message; }
+        public void setMessage(String message) { this.message = message; }
+    }
 }
