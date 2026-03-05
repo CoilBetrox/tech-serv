@@ -44,6 +44,12 @@
           <label class="flex flex-col flex-1">
             <div class="flex justify-between items-center pb-1.5">
               <p class="text-[#0d131b] dark:text-slate-200 text-sm font-medium leading-normal">Contraseña</p>
+              <router-link
+                to="/admin/forgot-password"
+                class="text-xs font-semibold text-primary hover:underline"
+              >
+                ¿Ha olvidado su contraseña?
+              </router-link>
             </div>
             <div class="relative">
               <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">

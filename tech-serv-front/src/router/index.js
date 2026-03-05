@@ -10,6 +10,8 @@ import NotFound from '../views/NotFound.vue'
 
 // Vistas de admin
 import Login from '../views/admin/Login.vue'
+import ForgotPassword from '../views/admin/ForgotPassword.vue'
+import ResetPassword from '../views/admin/ResetPassword.vue'
 import OrderList from '../views/admin/OrderList.vue'
 import CreateOrder from '../views/admin/CreateOrder.vue'
 import EditOrder from '../views/admin/EditOrder.vue'
@@ -43,6 +45,18 @@ const routes = [
     path: '/admin/login',
     name: 'admin-login',
     component: Login,
+    meta: { public: true }
+  },
+  {
+    path: '/admin/forgot-password',
+    name: 'forgot-password',
+    component: ForgotPassword,
+    meta: { public: true }
+  },
+  {
+    path: '/admin/reset-password',
+    name: 'reset-password',
+    component: ResetPassword,
     meta: { public: true }
   },
   {

@@ -1,5 +1,13 @@
 package com.techservback.service;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,11 +25,21 @@ public class AuthServiceImpl implements IAuthService {
     final private IUserRepository userRepository;
     final private PasswordEncoder passwordEncoder;
     final private JwtTokenProvider jwtTokenProvider;
+    final private JavaMailSender mailSender;
 
-    public AuthServiceImpl(IUserRepository userRepository, PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider) {
+    @Value("${app.frontend.url:http://localhost:5173}")
+    private String frontendUrl;
+
+    public AuthServiceImpl(
+        IUserRepository userRepository,
+        PasswordEncoder passwordEncoder,
+        JwtTokenProvider jwtTokenProvider,
+        JavaMailSender mailSender
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.mailSender = mailSender;
     }
 
     @Override
@@ -59,6 +77,77 @@ public class AuthServiceImpl implements IAuthService {
         user.setPassword(passwordEncoder.encode(password));
         user.setRole(role);
         return userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void createPasswordResetToken(String email) {
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        // Respuesta neutra para no filtrar existencia de usuarios.
+        if (user == null || !"ADMIN".equalsIgnoreCase(user.getRole()) || Boolean.FALSE.equals(user.getIsActive())) {
+            return;
+        }
+
+        String rawToken = UUID.randomUUID().toString();
+        user.setResetToken(rawToken);
+        user.setTokenExpiration(LocalDateTime.now().plusMinutes(30));
+        userRepository.save(user);
+
+        String frontendBaseUrl = resolveFrontendBaseUrl();
+
+        String resetUrl = frontendBaseUrl + "/admin/reset-password?token="
+            + URLEncoder.encode(rawToken, StandardCharsets.UTF_8);
+
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(user.getEmail());
+        mail.setSubject("Recuperación de contraseña - TechService");
+        mail.setText(
+            "Hola,\n\n"
+                + "Recibimos una solicitud para restablecer tu contraseña.\n"
+                + "Usa el siguiente enlace:\n"
+                + resetUrl + "\n\n"
+                + "Este enlace expira en 30 minutos.\n"
+                + "Si no solicitaste este cambio, ignora este correo."
+        );
+
+        mailSender.send(mail);
+    }
+
+    private String resolveFrontendBaseUrl() {
+        if (frontendUrl == null || frontendUrl.isBlank()) {
+            return "http://localhost:5173";
+        }
+
+        String[] candidates = frontendUrl.split(",");
+        for (String candidate : candidates) {
+            String url = candidate.trim();
+            if (!url.isEmpty()) {
+                return url;
+            }
+        }
+
+        return "http://localhost:5173";
+    }
+
+    @Override
+    @Transactional
+    public void resetPassword(String token, String newPassword) {
+        User user = userRepository.findByResetToken(token)
+            .orElseThrow(() -> new RuntimeException("Token inválido"));
+
+        if (user.getTokenExpiration() == null || user.getTokenExpiration().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("El token ha expirado");
+        }
+
+        if (Boolean.FALSE.equals(user.getIsActive())) {
+            throw new RuntimeException("Usuario inactivo");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setResetToken(null);
+        user.setTokenExpiration(null);
+        userRepository.save(user);
     }
 
 }
