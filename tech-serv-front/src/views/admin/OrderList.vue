@@ -210,7 +210,7 @@
         class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 px-4"
         @click.self="closeOrderModal"
       >
-        <div class="w-full max-w-md rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl">
+        <div ref="orderDetailRef" class="w-full max-w-md rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl">
           <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 px-5 py-4">
             <h3 class="text-lg font-bold text-slate-900 dark:text-white">Detalle de orden</h3>
             <button
@@ -227,7 +227,26 @@
           <div class="space-y-4 px-5 py-4">
             <div>
               <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Código de ticket</p>
-              <p class="font-mono text-xl sm:text-2xl font-extrabold tracking-wide text-primary">{{ selectedOrder.id }}</p>
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <p class="font-mono text-xl sm:text-2xl font-extrabold tracking-wide text-primary">{{ selectedOrder.id }}</p>
+                <div class="flex items-center gap-2">
+                  <button
+                    type="button"
+                    class="h-8 rounded-md px-3 text-xs font-semibold border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
+                    @click="copyTicketCode(selectedOrder.id)"
+                  >
+                    {{ copyFeedback ? 'Copiado' : 'Copiar' }}
+                  </button>
+                  <button
+                    type="button"
+                    class="h-8 rounded-md px-3 text-xs font-semibold border border-primary/40 text-primary hover:bg-primary/10 disabled:opacity-60"
+                    :disabled="downloadingImage"
+                    @click="downloadOrderImage"
+                  >
+                    {{ downloadingImage ? 'Descargando...' : 'Descargar' }}
+                  </button>
+                </div>
+              </div>
             </div>
 
             <div>
@@ -265,6 +284,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
+import html2canvas from 'html2canvas'
 import { useRoute, useRouter } from 'vue-router'
 import { useOrderStore } from '../../stores/order.store'
 import { useUIStore } from '../../stores/ui.store'
@@ -279,6 +299,9 @@ const uiStore = useUIStore()
 const isModalOpen = ref(false)
 const selectedOrder = ref(null)
 const isCreatedOrderPreview = ref(false)
+const orderDetailRef = ref(null)
+const copyFeedback = ref(false)
+const downloadingImage = ref(false)
 
 onMounted(async () => {
   await orderStore.fetchOrders()
@@ -324,6 +347,42 @@ function closeOrderModal() {
   isModalOpen.value = false
   selectedOrder.value = null
   isCreatedOrderPreview.value = false
+  copyFeedback.value = false
+}
+
+async function copyTicketCode(ticketCode) {
+  try {
+    await navigator.clipboard.writeText(String(ticketCode || ''))
+    copyFeedback.value = true
+    setTimeout(() => {
+      copyFeedback.value = false
+    }, 1500)
+  } catch (error) {
+    console.error('No se pudo copiar el ticket:', error)
+  }
+}
+
+async function downloadOrderImage() {
+  if (!orderDetailRef.value || !selectedOrder.value) return
+
+  try {
+    downloadingImage.value = true
+    const canvas = await html2canvas(orderDetailRef.value, {
+      scale: 2,
+      backgroundColor: null,
+      useCORS: true
+    })
+
+    const imageUrl = canvas.toDataURL('image/png')
+    const link = document.createElement('a')
+    link.href = imageUrl
+    link.download = `detalle-${selectedOrder.value.id}.png`
+    link.click()
+  } catch (error) {
+    console.error('No se pudo descargar el detalle de la orden:', error)
+  } finally {
+    downloadingImage.value = false
+  }
 }
 
 function formatCurrency(value) {
