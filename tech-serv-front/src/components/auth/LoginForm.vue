@@ -2,7 +2,7 @@
   <div class="bg-white dark:bg-slate-900 shadow-2xl rounded-xl overflow-hidden">
     <div class="pt-8 pb-4 text-center">
       <div class="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
-        <span class="material-symbols-outlined text-primary text-4xl">build_circle</span>
+        <img src="/icots.svg" alt="TechService" class="w-10 h-10 object-contain" />
       </div>
       <h1 class="text-[#0d131b] dark:text-white tracking-tight text-[28px] font-bold leading-tight px-4">
         TechService
