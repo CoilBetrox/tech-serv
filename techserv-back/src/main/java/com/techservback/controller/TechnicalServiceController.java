@@ -152,7 +152,7 @@ public class TechnicalServiceController {
     @GetMapping("/ticket/{ticketCode}")
     public ResponseEntity<?> getByTicketCode(@PathVariable String ticketCode) {
         return technicalServiceService.getByTicketCode(ticketCode)
-                .map(com.techservback.dto.TechnicalServiceMapper::toDto)
+                .map(com.techservback.dto.TechnicalServiceMapper::toPublicDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
