@@ -17,34 +17,34 @@
           <section class="bg-white dark:bg-slate-900 rounded-xl border border-[#e7ecf3] dark:border-slate-800 p-6">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white">Bienvenida</h2>
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
-                Bienvenido a TechServ. Al acceder o utilizar nuestro sitio web y servicios, usted acepta estar sujeto a estos Términos y Condiciones. Si no está de acuerdo con alguna parte de estos términos, no podrá utilizar nuestros servicios.
+                Bienvenido a TechService. Al acceder o utilizar nuestro sitio web y servicios, usted acepta estar sujeto a estos Términos y Condiciones. Si no está de acuerdo con alguna parte de estos términos, no podrá utilizar nuestros servicios.
             </p>
           </section>
 
           <section class="bg-white dark:bg-slate-900 rounded-xl border border-[#e7ecf3] dark:border-slate-800 p-6">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white">Términos Generales</h2>
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
-                Al acceder a TechServ, usted confirma que tiene la autoridad legal para vincularse a estos términos. El servicio se proporciona para facilitar la gestión de servicios técnicos mediante el seguimiento de tickets y la automatización de flujos de trabajo.
+                Al acceder a TechService, usted confirma que tiene la autoridad legal para vincularse a estos términos. El servicio se proporciona para facilitar la gestión de servicios técnicos mediante el seguimiento de tickets y la automatización de flujos de trabajo.
             </p>
           </section>
 
           <section class="bg-white dark:bg-slate-900 rounded-xl border border-[#e7ecf3] dark:border-slate-800 p-6">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white">Licencia</h2>
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
-                TechServ le otorga una licencia limitada, no exclusiva, no transferible y revocable para utilizar la plataforma estrictamente de acuerdo con los términos de esta licencia. Esta licencia es para uso comercial del taller o técnico y no otorga derechos sobre el código fuente.
+                TechService le otorga una licencia limitada, no exclusiva, no transferible y revocable para utilizar la plataforma estrictamente de acuerdo con los términos de esta licencia. Esta licencia es para uso comercial del taller o técnico y no otorga derechos sobre el código fuente.
             </p>
           </section>
 
           <section class="bg-white dark:bg-slate-900 rounded-xl border border-[#e7ecf3] dark:border-slate-800 p-6">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white">Definiciones y términos clave</h2>
             <ul class="mt-3 list-disc list-inside text-sm text-slate-500 dark:text-slate-400">
-                <li>TechServ: La plataforma de gestión de servicios técnicos.</li>
-                <li>Técnico: El usuario que utiliza TechServ para gestionar sus servicios técnicos.</li>
-                <li>Cliente: El destinatario final del servicio técnico gestionado a través de TechServ.</li>
+                <li>TechService: La plataforma de gestión de servicios técnicos.</li>
+                <li>Técnico: El usuario que utiliza TechService para gestionar sus servicios técnicos.</li>
+                <li>Cliente: El destinatario final del servicio técnico gestionado a través de TechService.</li>
                 <li>Ticket: Registro digital generado para el seguimiento de un dispositivo o servicio.</li>
                 <li>Flujo de trabajo: Proceso automatizado que guía la gestión de servicios técnicos.</li>
-                <li>Plataforma: Se refiere al sitio web y aplicativo TechServ alojado en la nube.</li>
-                <li>Nosotros: Se refiere a los administradores y desarrolladores de TechServ.</li>
+                <li>Plataforma: Se refiere al sitio web y aplicativo TechService alojado en la nube.</li>
+                <li>Nosotros: Se refiere a los administradores y desarrolladores de TechService.</li>
             </ul>
           </section>
 
@@ -77,7 +77,7 @@
           <section class="bg-white dark:bg-slate-900 rounded-xl border border-[#e7ecf3] dark:border-slate-800 p-6">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white">Tus Sugerencias</h2>
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
-                Cualquier comentario, idea o sugerencia que usted proporcione a TechServ será propiedad exclusiva de los desarrolladores. Podremos utilizar dichas sugerencias para mejorar el servicio sin ninguna obligación de compensación hacia usted.
+                Cualquier comentario, idea o sugerencia que usted proporcione a TechService será propiedad exclusiva de los desarrolladores. Podremos utilizar dichas sugerencias para mejorar el servicio sin ninguna obligación de compensación hacia usted.
             </p>
           </section>
 
@@ -98,28 +98,28 @@
           <section class="bg-white dark:bg-slate-900 rounded-xl border border-[#e7ecf3] dark:border-slate-800 p-6">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white">Actualizaciones a Nuestro Sitio Web</h2>
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
-                TechServ puede proporcionar actualizaciones (parches, correcciones de errores, nuevas funciones). Usted acepta que estas actualizaciones pueden modificar o eliminar ciertas características de la plataforma.
+                TechService puede proporcionar actualizaciones (parches, correcciones de errores, nuevas funciones). Usted acepta que estas actualizaciones pueden modificar o eliminar ciertas características de la plataforma.
             </p>
           </section>
 
           <section class="bg-white dark:bg-slate-900 rounded-xl border border-[#e7ecf3] dark:border-slate-800 p-6">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white">Término y Terminación</h2>
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
-                Este acuerdo permanecerá en vigor hasta que sea terminado por usted o por TechServ. El incumplimiento de cualquier disposición de este acuerdo resultará en la terminación automática del acceso al servicio.
+                Este acuerdo permanecerá en vigor hasta que sea terminado por usted o por TechService. El incumplimiento de cualquier disposición de este acuerdo resultará en la terminación automática del acceso al servicio.
             </p>
           </section>
 
           <section class="bg-white dark:bg-slate-900 rounded-xl border border-[#e7ecf3] dark:border-slate-800 p-6">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white">Sin Garantías</h2>
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
-                El servicio se proporciona "TAL CUAL" y "SEGÚN DISPONIBILIDAD". TechServ no ofrece garantías de que el servicio sea ininterrumpido, libre de errores o que los resultados del uso del servicio cumplan con sus expectativas comerciales.
+                El servicio se proporciona "TAL CUAL" y "SEGÚN DISPONIBILIDAD". TechService no ofrece garantías de que el servicio sea ininterrumpido, libre de errores o que los resultados del uso del servicio cumplan con sus expectativas comerciales.
             </p>
           </section>
 
           <section class="bg-white dark:bg-slate-900 rounded-xl border border-[#e7ecf3] dark:border-slate-800 p-6">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white">Limitación de Responsabilidad</h2>
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
-                En ningún caso TechServ será responsable por daños indirectos, incidentales o especiales (incluyendo pérdida de beneficios o datos) que surjan del uso o la imposibilidad de usar la plataforma. La responsabilidad total se limitará al monto pagado por el servicio en el último mes.
+                En ningún caso TechService será responsable por daños indirectos, incidentales o especiales (incluyendo pérdida de beneficios o datos) que surjan del uso o la imposibilidad de usar la plataforma. La responsabilidad total se limitará al monto pagado por el servicio en el último month.
             </p>
           </section>
 
@@ -133,7 +133,7 @@
           <section class="bg-white dark:bg-slate-900 rounded-xl border border-[#e7ecf3] dark:border-slate-800 p-6">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white">Descargo de Responsabilidad</h2>
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
-                TechServ no se hace responsable por las decisiones técnicas o comerciales tomadas por el taller hacia sus clientes finales basándose en la información registrada en el sistema. El uso de la herramienta es responsabilidad exclusiva del técnico encargado.
+                TechService no se hace responsable por las decisiones técnicas o comerciales tomadas por el taller hacia sus clientes finales basándose en la información registrada en el sistema. El uso de la herramienta es responsabilidad exclusiva del técnico encargado.
             </p>
           </section>
 

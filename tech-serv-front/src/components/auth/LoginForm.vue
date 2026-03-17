@@ -7,7 +7,7 @@
       <h1 class="text-[#0d131b] dark:text-white tracking-tight text-[28px] font-bold leading-tight px-4">
         TechService
       </h1>
-      <p class="text-[#4c6c9a] dark:text-slate-400 text-sm font-medium mt-1">Portal de técnicos</p>
+      <p class="text-[#4c6c9a] dark:text-slate-400 text-sm font-medium mt-1">Portal de técnicos y servicios profesionales</p>
     </div>
     
     <form @submit.prevent="handleSubmit" class="px-8 pt-4 pb-6">
@@ -87,7 +87,7 @@
     <div class="p-8">
       <div class="bg-primary/5 dark:bg-primary/10 border border-primary/10 rounded-xl p-5 text-center">
         <p class="text-[#0d131b] dark:text-slate-200 text-sm font-semibold mb-2">¿Eres cliente?</p>
-        <p class="text-[#4c6c9a] dark:text-slate-400 text-xs mb-4">Consulta el estado de tu reparación sin cuenta.</p>
+        <p class="text-[#4c6c9a] dark:text-slate-400 text-xs mb-4">Consulta el estado de tu requerimiento.</p>
         <router-link 
           to="/"
           class="inline-flex items-center gap-2 text-primary font-bold text-sm hover:underline"

@@ -1,10 +1,8 @@
 <template>
-  <header class="relative flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-3 lg:px-40">
+  <header class="relative flex h-16 items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 lg:px-40">
     <div class="flex items-center gap-8">
       <div class="flex items-center gap-4 text-primary">
-        <div class="size-8 flex items-center justify-center rounded-lg bg-primary/10">
-          <span class="material-symbols-outlined">rocket_launch</span>
-        </div>
+        <img src="/icots.svg" alt="TechService" class="size-8 object-contain" />
         <h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight">
           TechService
         </h2>

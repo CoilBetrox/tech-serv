@@ -19,7 +19,7 @@
             Crear nueva orden de servicio
           </h1>
           <p class="text-slate-500 dark:text-slate-400 text-base">
-            Ingresa los datos del cliente y del dispositivo para iniciar la solicitud de reparación. Los campos con * son obligatorios.
+            Ingresa los datos del cliente y detalles de orden para iniciar la solicitud de reparación. Los campos con * son obligatorios.
           </p>
         </div>
         
@@ -142,7 +142,7 @@
                   <input 
                     v-model="form.device.brand"
                     class="form-input rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 px-4 text-slate-900 dark:text-white focus:ring-primary" 
-                    :placeholder="isServiceOrder ? 'e.g., Mantenimiento preventivo' : 'e.g., Apple, Dell, Lenovo'"
+                    :placeholder="isServiceOrder ? 'e.g., Servicio profesional' : 'e.g., Apple, Dell, Lenovo'"
                     type="text"
                     maxlength="40"
                     required

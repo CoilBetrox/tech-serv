@@ -17,7 +17,7 @@
             Consulta rápida de estado
           </h1>
           <p class="text-[#4c6c9a] dark:text-slate-400 text-lg font-normal leading-normal max-w-[600px] mx-auto">
-            Consulta el estado de la reparación en tiempo real. Ingresa tu número de ticket para comenzar.
+            Consulta el estado del requerimiento en tiempo real. Ingresa tu número de ticket para comenzar.
           </p>
         </div>
         
@@ -105,49 +105,16 @@
           <!-- Detalles adicionales -->
           <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="flex items-start gap-3">
-              <span class="material-symbols-outlined text-slate-400">phone</span>
-              <div>
-                <p class="text-xs text-slate-400">Contacto</p>
-                <p class="text-sm font-medium dark:text-white">{{ ticketData.phone }}</p>
-              </div>
-            </div>
-            
-            <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-slate-400">description</span>
               <div>
-                <p class="text-xs text-slate-400">{{ ticketData.deviceType === 'SERVICE' ? 'Servicio' : 'Falla reportada' }}</p>
+                <p class="text-xs text-slate-400">{{ ticketData.deviceType === 'SERVICE' ? 'Servicio' : 'Requerimiento' }}</p>
                 <p class="text-sm font-medium dark:text-white whitespace-pre-wrap break-words [overflow-wrap:anywhere] leading-relaxed">{{ ticketData.issue }}</p>
               </div>
             </div>
           </div>
 
           <!-- Historial de actualizaciones del técnico -->
-          <div v-if="ticketData.updates && ticketData.updates.length" class="mt-8">
-            <div class="flex items-center gap-2 mb-4">
-              <span class="material-symbols-outlined text-primary">history</span>
-              <h4 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Actualizaciones del técnico</h4>
-            </div>
-            <div class="space-y-3">
-              <div 
-                v-for="(update, index) in ticketData.updates" 
-                :key="index"
-                class="p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50"
-              >
-                <div class="flex items-start gap-3">
-                  <div class="mt-0.5">
-                    <div class="size-2 rounded-full bg-primary"></div>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <div class="flex items-center gap-2 mb-1">
-                      <span class="text-xs font-bold text-primary uppercase">{{ update.stage }}</span>
-                      <span v-if="update.date" class="text-xs text-slate-400">• {{ update.date }}</span>
-                    </div>
-                    <p class="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap break-words [overflow-wrap:anywhere] leading-relaxed">{{ update.message }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <UpdatesTimeline :updates="ticketData?.updates || []" wrapper-class="mt-8" />
         </div>
         
       </div>
@@ -162,6 +129,7 @@ import { ref } from 'vue'
 import PublicHeader from '../../components/layout/PublicHeader.vue'
 import Footer from '../../components/layout/Footer.vue'
 import StatusStepper from '../../components/ui/StatusStepper.vue'
+import UpdatesTimeline from '../../components/ui/UpdatesTimeline.vue'
 import { publicService } from '../../services/api'
 
 // Estado
@@ -194,7 +162,6 @@ async function searchTicket() {
       clientName: customerName,
       deviceType: String(data?.device?.type || 'Device').toUpperCase(),
       device: deviceText,
-      phone: data?.device?.customer?.phone || 'No disponible',
       issue: data?.description || 'Sin descripción de falla',
       status: mappedStatus,
       lastActivity: data?.createdAt

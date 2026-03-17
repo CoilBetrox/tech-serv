@@ -2,10 +2,11 @@ package com.techservback.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 import lombok.Data;
 
 @Data
-public class TechnicalServiceDTO {
+public class PublicTechnicalServiceDTO {
     private Long id;
     private String ticketCode;
     private String description;
@@ -20,5 +21,5 @@ public class TechnicalServiceDTO {
     private String inProgressMessage;
     private String finalizedMessage;
     private String deliveredMessage;
-    private DeviceDTO device;
+    private PublicDeviceDTO device;
 }

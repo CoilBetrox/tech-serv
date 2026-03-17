@@ -17,7 +17,7 @@
           <section class="bg-white dark:bg-slate-900 rounded-xl border border-[#e7ecf3] dark:border-slate-800 p-6">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white">Introducción</h2>
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
-              En TechServ, valoramos su privacidad y nos comprometemos a proteger sus datos personales.
+              En TechService, valoramos su privacidad y nos comprometemos a proteger sus datos personales.
             </p>
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
               Esta Política de Privacidad explica cómo recopilamos, usamos y protegemos la información dentro de nuestra plataforma de gestión de servicios técnicos.
@@ -52,7 +52,7 @@
           <section class="bg-white dark:bg-slate-900 rounded-xl border border-[#e7ecf3] dark:border-slate-800 p-6">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white">Consentimiento</h2>
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
-              Al utilizar TechServ o registrar los datos de sus clientes en la plataforma, usted declara que tiene el consentimiento de dichos terceros para el tratamiento de su información con fines estrictamente técnicos y de notificación.
+              Al utilizar TechService o registrar los datos de sus clientes en la plataforma, usted declara que tiene el consentimiento de dichos terceros para el tratamiento de su información con fines estrictamente técnicos y de notificación.
             </p>
           </section>
 
@@ -71,7 +71,7 @@
           <section class="bg-white dark:bg-slate-900 rounded-xl border border-[#e7ecf3] dark:border-slate-800 p-6">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white">Terceros y Divulgación</h2>
             <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
-              TechServ no vende, alquila ni comercializa datos personales a terceros. La información solo es accesible por el administrador del taller contratante. Los datos pueden ser alojados en proveedores de infraestructura en la nube (como Oracle Cloud) bajo estrictos estándares de seguridad, pero estos proveedores no tienen acceso a su información privada.
+              TechService no vende, alquila ni comercializa datos personales a terceros. La información solo es accesible por el administrador del taller contratante. Los datos pueden ser alojados en proveedores de infraestructura en la nube (como Oracle Cloud) bajo estrictos estándares de seguridad, pero estos proveedores no tienen acceso a su información privada.
             </p>
           </section>
 

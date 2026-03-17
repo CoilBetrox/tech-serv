@@ -11,7 +11,7 @@
               Gestión de servicios
             </h1>
             <p class="text-slate-500 dark:text-slate-400 text-sm sm:text-base font-normal">
-              Seguimiento y administración de órdenes de reparación.
+              Seguimiento y administración de órdenes.
             </p>
           </div>
           
